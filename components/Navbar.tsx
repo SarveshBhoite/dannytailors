@@ -8,32 +8,50 @@ export default function Navbar() {
 
   return (
     <>
-      {/* TOP NAV BAR — OVERLAY, NO BG STRIP */}
-      <header className="pointer-events-none absolute inset-x-0 top-0 z-30 flex h-20 items-center justify-between px-10">
-        {/* left logo */}
+      {/* NAV BAR */}
+      <header
+        className="
+          pointer-events-none absolute inset-x-0 top-0 z-30 
+          flex h-16 md:h-20 items-center justify-between px-4 sm:px-6 
+          md:px-10
+        "
+      >
+        {/* LEFT LOGO */}
         <div className="pointer-events-auto flex items-center gap-3">
           <Image
             src="/logo.svg"
             alt="Danny Tailors logo"
             width={70}
             height={70}
-            className="h-20 w-20 object-contain"
+            className="h-12 w-12 sm:h-14 sm:w-14 md:h-20 md:w-20 object-contain"
           />
         </div>
 
-        {/* center brand name */}
-        <div className="pointer-events-auto brand-font text-center tracking-[0.10em] text-[#D7B58A] ms-62">
+        {/* CENTER BRAND NAME — hidden on mobile */}
+        <div
+          className="
+          pointer-events-auto brand-font 
+          hidden lg:block 
+          text-center tracking-[0.10em] text-[#D7B58A] ms-62
+        "
+        >
           Danny Tailors & Clothiers
         </div>
 
-        {/* right: shop + cart + menu */}
-        <div className="pointer-events-auto flex items-center gap-4">
-          <button className="relative inline-flex items-center gap-2 px-[18px] py-[13.5px] text-[0.8rem] text-[#8B744B]">
+        {/* RIGHT BUTTONS */}
+        <div className="pointer-events-auto flex items-center gap-2 sm:gap-3 md:gap-4">
+          {/* SHOP NOW — hide on small screens */}
+          <button
+            className="
+            relative hidden md:inline-flex 
+            items-center gap-2 px-[18px] py-[13.5px] 
+            text-[0.8rem] text-[#8B744B]
+          "
+          >
             <span className="z-10">Shop Now</span>
 
-            {/* Magnifying Glass Icon */}
             <svg
-              xmlns="http://www.w3.org/200/svg"
+              xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
               stroke="#8B744B"
@@ -44,7 +62,6 @@ export default function Navbar() {
               <line x1="15" y1="15" x2="22" y2="22" />
             </svg>
 
-            {/* Custom dashed border */}
             <svg
               className="pointer-events-none absolute inset-0 h-full w-full rounded-[9px]"
               viewBox="0 0 200 50"
@@ -65,14 +82,14 @@ export default function Navbar() {
             </svg>
           </button>
 
-          {/* cart icon */}
+          {/* CART ICON */}
           <button
-            className="flex h-10 w-10 items-center justify-center text-[#8B744B]"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center text-[#8B744B]"
             aria-label="Cart"
           >
             <svg
-              xmlns="http://www.w3.org/200/svg"
-              className="h-4 w-4"
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-5 w-5 sm:h-5 sm:w-5 md:h-4 md:w-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="#f2d39a"
@@ -85,20 +102,20 @@ export default function Navbar() {
             </svg>
           </button>
 
-          {/* toggle button */}
+          {/* MENU TOGGLE */}
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex h-10 w-10 flex-col items-center justify-center gap-1.5"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 flex-col items-center justify-center gap-1 sm:gap-1.5"
             aria-label="Open menu"
           >
-            <span className="h-[2px] w-5 bg-[#8B744B]" />
-            <span className="h-[2px] w-5 bg-[#8B744B]" />
-            <span className="h-[2px] w-5 bg-[#8B744B]" />
+            <span className="h-[2px] w-5 sm:h-[3px] sm:w-6 bg-[#8B744B] md:h-[2px] md:w-5" />
+            <span className="h-[2px] w-5 sm:h-[3px] sm:w-6 bg-[#8B744B] md:h-[2px] md:w-5" />
+            <span className="h-[2px] w-5 sm:h-[3px] sm:w-6 bg-[#8B744B] md:h-[2px] md:w-5" />
           </button>
         </div>
       </header>
 
-      {/* RIGHT SLIDE MENU */}
+      {/* SIDE MENU */}
       <div
         className={`fixed inset-0 z-40 transition ${
           isMenuOpen ? "pointer-events-auto" : "pointer-events-none"
@@ -112,32 +129,54 @@ export default function Navbar() {
         />
 
         <aside
-          className={`absolute right-0 top-0 flex h-full w-80 max-w-full flex-col bg-[#050B21]/95 px-8 py-10 text-sm text-white shadow-2xl transition-transform duration-300 ${
-            isMenuOpen ? "translate-x-0" : "translate-x-full"
-          }`}
+          className={`
+            absolute right-0 top-0 
+            h-full w-[85vw] max-w-xs sm:w-72 md:w-80 
+            flex flex-col 
+            bg-[#050B21]/95 px-6 sm:px-8 py-8 sm:py-10 text-sm text-white shadow-2xl 
+            transition-transform duration-300
+            ${isMenuOpen ? "translate-x-0" : "translate-x-full"}
+          `}
         >
           <button
             onClick={() => setIsMenuOpen(false)}
-            className="mb-8 self-end text-xs tracking-[0.25em] text-[#f2d39a]"
+            className="mb-6 sm:mb-8 self-end text-lg sm:text-xs tracking-[0.25em] text-[#f2d39a] p-2"
           >
             ✕
           </button>
 
-          <h3 className="mb-6 text-[0.65rem] font-semibold uppercase tracking-[0.4em] text-[#f2d39a]">
+          {/* Mobile Brand Name - Only in menu */}
+          <div className="mb-6 pb-4 border-b border-white/10 md:hidden">
+            <p className="text-[#f2d39a] text-sm font-medium tracking-wider">
+              Danny Tailors
+            </p>
+            <p className="text-[#f2d39a]/70 text-xs tracking-wider">
+              & Clothiers
+            </p>
+          </div>
+
+          <h3 className="mb-4 sm:mb-6 text-[0.65rem] sm:text-[0.7rem] font-semibold uppercase tracking-[0.4em] text-[#f2d39a]">
             Our Products
           </h3>
 
-          <nav className="space-y-4 text-xs">
+          <nav className="space-y-3 sm:space-y-4 text-xs">
             {["Aprons", "Chef Coats", "Uniforms", "Pants"].map((item) => (
               <button
                 key={item}
-                className="flex w-full items-center justify-between border-b border-white/10 pb-3 text-left uppercase tracking-[0.25em]"
+                className="flex w-full items-center justify-between border-b border-white/10 pb-3 uppercase tracking-[0.25em] hover:text-[#f2d39a] transition-colors"
               >
-                <span>{item}</span>
+                {item}
                 <span className="text-xs text-[#f2d39a]">&lt;</span>
               </button>
             ))}
           </nav>
+
+          {/* Mobile Shop Now in Menu */}
+          <div className="mt-auto pt-6 md:hidden">
+            <button className="w-full py-3 bg-gradient-to-r from-[#D2B589] to-[#8B744B] rounded-lg text-[#050B21] font-semibold text-sm tracking-wider">
+              Shop Now
+            </button>
+          </div>
         </aside>
       </div>
     </>
