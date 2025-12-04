@@ -18,7 +18,7 @@ export default function HeroSection() {
 
   return (
     <div className="relative min-h-screen text-white overflow-hidden">
-      {/* MAIN GRID */}
+      {/* MAIN GRID - No top padding, navbar overlays */}
       <main className="grid min-h-screen grid-cols-1 bg-[#000A23] md:bg-gradient-to-r md:from-[#000A23] md:to-[#000A23BF] md:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
         {/* LEFT: IMAGE CAROUSEL */}
         <section className="relative flex h-[50vh] sm:h-[55vh] md:h-full md:min-h-[100vh] items-center justify-center bg-black">
@@ -34,7 +34,7 @@ export default function HeroSection() {
                 alt="Tailored suit model"
                 fill
                 priority={index === 0}
-                className="object-cover object-center md:object-left-top"
+                className="object-cover object-[center_20%] sm:object-[center_25%] md:object-left-top"
               />
               {/* Gradient overlay for mobile text readability */}
               <div className="absolute inset-0 bg-gradient-to-t from-[#000A23] via-transparent to-transparent md:hidden" />
@@ -42,8 +42,8 @@ export default function HeroSection() {
           ))}
 
           {/* Mobile Title Overlay - Only visible on mobile */}
-          <div className="absolute bottom-16 left-0 right-0 z-10 px-6 text-center md:hidden">
-            <p className="text-sm font-medium tracking-[0.3em] text-[#8B744B] uppercase mb-2">
+          <div className="absolute bottom-10 left-0 right-0 z-10 px-6 text-center md:hidden">
+            <p className="text-sm font-medium tracking-[0.3em] text-[#8B744B] uppercase mb-1">
               For
             </p>
             <p className="text-3xl sm:text-4xl font-black uppercase text-[#D7B58A]">
@@ -52,13 +52,13 @@ export default function HeroSection() {
             <h1 className="text-3xl sm:text-4xl font-black uppercase text-white tracking-wide">
               Professional
             </h1>
-            <p className="text-sm font-medium tracking-[0.3em] text-[#8B744B] uppercase mt-2">
+            <p className="text-sm font-medium tracking-[0.3em] text-[#8B744B] uppercase mt-1">
               In You
             </p>
           </div>
 
           {/* dots */}
-          <div className="absolute bottom-4 md:bottom-8 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
+          <div className="absolute bottom-2 md:bottom-8 left-1/2 z-10 flex -translate-x-1/2 items-center gap-3">
             {heroImages.map((_, index) => (
               <button
                 key={index}
@@ -74,7 +74,7 @@ export default function HeroSection() {
         </section>
 
         {/* RIGHT CONTENT */}
-        <section className="relative flex items-center justify-center py-12 px-6 md:py-0 md:px-0 md:mt-30">
+        <section className="relative flex items-start md:items-center justify-center pt-4 pb-6 px-6 sm:pt-6 sm:pb-8 md:py-0 md:px-0 md:mt-30">
           {/* vertical text left - DESKTOP ONLY */}
           <span className="pointer-events-none for absolute left-17 top-36 hidden -translate-y-1/2 text-[#8B744B] [writing-mode:vertical-rl] rotate-180 md:inline">
             FOR
@@ -106,7 +106,7 @@ export default function HeroSection() {
               </p>
 
               <div className="flex justify-center md:justify-start">
-                <button className="relative mt-6 inline-flex items-center gap-2 px-6 py-2 md:p-8 md:py-2 text-[0.85rem] md:text-[0.9rem]">
+                <button className="relative mt-4 md:mt-6 inline-flex items-center gap-2 px-6 py-2 md:p-8 md:py-2 text-[0.85rem] md:text-[0.9rem]">
                   <span className="z-10">Learn More</span>
                   <span className="text-[0.9rem] z-10">↗</span>
 
@@ -133,7 +133,7 @@ export default function HeroSection() {
             </div>
 
             {/* socials */}
-            <div className="mt-10 md:mt-20 flex flex-col items-center md:items-end gap-3">
+            <div className="mt-6 sm:mt-8 md:mt-20 flex flex-col items-center md:items-end gap-2 md:gap-3">
               <div className="flex items-center gap-4 md:gap-3">
                 {/* Instagram */}
                 <a
@@ -191,9 +191,7 @@ export default function HeroSection() {
       </main>
 
       {/* bottom strip */}
-      <div
-        className="relative z-20 w-full bg-gradient-to-r from-[#D2B589] to-[#6C5D46] py-2 md:py-3 text-center text-[0.55rem] tracking-[0.25em] sm:text-[0.65rem]  sm:tracking-[0.4em] md:text-sm md:tracking-[0.9em] uppercase strip-text"
-      >
+      <div className="relative z-20 w-full bg-gradient-to-r from-[#D2B589] to-[#6C5D46] py-2 md:py-3 text-center text-[0.55rem] tracking-[0.25em] sm:text-[0.65rem] sm:tracking-[0.4em] md:text-sm md:tracking-[0.9em] uppercase strip-text">
         Excelling&nbsp;&nbsp;Since&nbsp;&nbsp;
         <span className="number">2000</span>
       </div>
