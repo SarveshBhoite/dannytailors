@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+body {
+  font-family: Montserrat, system-ui, sans-serif;
+}
+
+/* Brand script in navbar */
+.brand-font {
+  font-family: var(--font-greatvibes);
+  font-weight: 400;
+  font-size: 24px;
+  letter-spacing: -1%;
+}
+
+/* Shared heading font */
+.for,
+.real,
+.bold-text,
+.in {
+  font-family: var(--font-lexend);
+}
+
+.for {
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.real {
+  line-height: 1.1;
+}
+
+.real .curly-text {
+  font-family: var(--font-greatvibes);
+  font-size: 32px;
+  font-weight: 400;
+  text-transform: none;
+}
+
+.bold-text {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.in {
+  font-size: 32px;
+  font-weight: 800;
+}
+
+.strip-text {
+  font-size: 22px;
+  font-weight: 400;
+  font-family: var(--font-cormorantgaramond);
+}
+
+.strip-text .number {
+  font-family: var(--font-cinzel);
+}
+
+/* Desktop / large screens */
+
+@media (min-width: 1024px) {
+  .for {
+    font-size: 60px;
+  }
+
+  .real {
+    line-height: 0.6;
+  }
+
+  .real .curly-text {
+    font-size: 56px;
+  }
+
+  .bold-text {
+    font-size: 66px;
+  }
+
+  .in {
+    font-size: 55px;
+  }
+
+  .strip-text {
+    font-size: 40px;
+  }
+}
