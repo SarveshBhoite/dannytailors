@@ -21,27 +21,30 @@ const poppins = Poppins({
 });
 
 export default function ProductSection() {
-  // CONFIGURATION
-  const cutoutSize = "150px";
-  const bottomCutoutSize = "160px";
-
   // COLORS & STYLES
   const cardBackgroundGradient = "linear-gradient(180deg, #1A2138 0%, #050B23 100%)";
   const cardBorderStyles = {
-      border: "1px solid rgba(255, 255, 255, 0.05)",
+      border: "1px solid rgba(215, 181, 138, 0.28)",
       boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.1)"
   }
 
   // --- TYPOGRAPHY STYLES ---
-  // UPDATED: Added 'antialiased' for crispness, changed opacity to /70 for lightness, set leading to 100%
   const descStyle = `${montserrat.className} text-[16px] font-extralight leading-[100%] tracking-[0.05em] capitalize text-white/70 antialiased`;
   const verticalTextStyle = `${cormorant.className} text-[20px] font-medium leading-[100%] tracking-[0.44em] uppercase text-[#D7B58A] whitespace-nowrap`;
+
+  // --- ELLIPSE MASK CONFIGURATION ---
+  // To create an ellipse, we define two radii: horizontal (170px) and vertical (140px)
+  // This creates the wider, smoother curve seen in your Figma.
+  const topMask = "radial-gradient(150px 140px at 100% 100%, transparent 98%, black 100%)"; 
+  const topMaskRight = "radial-gradient(150px 140px at 0% 100%, transparent 98%, black 100%)";
+  // Bottom mask is slightly larger to accommodate the logo stack
+  const bottomMask = "radial-gradient(160px 140px at 50% 0%, transparent 98%, black 100%)";
 
   return (
     <section className={`w-full bg-[#050B23] text-white pt-16 pb-32 flex flex-col items-center select-none overflow-hidden ${poppins.className}`}>
       
       {/* RESPONSIVE WRAPPER */}
-      <div className="transform scale-[0.8] lg:scale-[0.85] xl:scale-[0.9] 2xl:scale-100 origin-top transition-transform duration-300">
+      <div className="transform scale-[0.8] lg:scale-[0.85] xl:scale-[0.9] 2xl:scale-100 origin-top transition-transform duration-300 relative">
           
           {/* ---- HEADER ---- */}
           <div className="w-[1224px] flex items-center gap-3 border-b border-white/10 pb-4 mb-12">
@@ -60,11 +63,12 @@ export default function ProductSection() {
               style={{
                 background: cardBackgroundGradient,
                 ...cardBorderStyles,
-                maskImage: `radial-gradient(circle at 100% 100%, transparent ${cutoutSize}, black ${parseInt(cutoutSize) + 1}px)`,
-                WebkitMaskImage: `radial-gradient(circle at 100% 100%, transparent ${cutoutSize}, black ${parseInt(cutoutSize) + 1}px)`,
+                // UPDATED: Using explicit Ellipse dimensions
+                maskImage: topMask,
+                WebkitMaskImage: topMask,
               }}
             >
-              {/* Icon Container: 117px width */}
+              {/* Icon Container */}
               <div className="absolute left-10 top-10 w-[117px] h-[117px] flex items-center justify-center">
                 <div className="absolute inset-0 rounded-full border border-[#D7B58A]/30 bg-[#D7B58A]/5" />
                 <Image src="/sewing.png" alt="Tailoring" width={95} height={95} className="opacity-90 relative z-10" />
@@ -93,11 +97,12 @@ export default function ProductSection() {
               style={{
                 background: cardBackgroundGradient,
                   ...cardBorderStyles,
-                maskImage: `radial-gradient(circle at 0% 100%, transparent ${cutoutSize}, black ${parseInt(cutoutSize) + 1}px)`,
-                WebkitMaskImage: `radial-gradient(circle at 0% 100%, transparent ${cutoutSize}, black ${parseInt(cutoutSize) + 1}px)`,
+                // UPDATED: Using explicit Ellipse dimensions
+                maskImage: topMaskRight,
+                WebkitMaskImage: topMaskRight,
               }}
             >
-              {/* Icon Container: 117px width */}
+              {/* Icon Container */}
               <div className="absolute right-10 top-10 w-[117px] h-[117px] flex items-center justify-center">
                 <div className="absolute inset-0 rounded-full border border-[#D7B58A]/30 bg-[#D7B58A]/5" />
                 <Image src="/embroidery.png" alt="Embroidery" width={75} height={75} className="opacity-90 relative z-10 left-2 top-1" />
@@ -120,21 +125,33 @@ export default function ProductSection() {
             </div>
           </div>
           
-          {/* ---- MIDDLE PART: TEXT ROW ---- */}
-          <div className="w-[1224px] flex justify-between items-center py-2 relative z-0">
+          {/* ---- MIDDLE PART: TEXT ROW & CENTER LOGO ---- */}
+          <div className="w-[1224px] flex justify-between items-center py-2 relative z-20">
               <p className={`${cormorant.className} text-[24px] tracking-[0.84em] uppercase`}>DANNY TAILORS</p>
-              {/* LOGO SPACE */}
+              
+              {/* --- CENTER LOGO --- */}
+              {/* Placed at the exact intersection of the ellipses */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[130px] h-[130px] z-30">
+                 <Image 
+                   src="/centerlogo.png" 
+                   alt="Center Logo" 
+                   fill 
+                   className="object-contain"
+                 />
+              </div>
+
               <p className={`${cormorant.className} text-[24px] tracking-[0.84em] uppercase`}>AND CLOTHIERS</p>
           </div>
 
           {/* ---- LOWER PART: BOTTOM CARD (UNIFORM) ---- */}
           <div
-              className="w-[1224px] h-[450px] rounded-[30px] relative overflow-hidden flex items-end justify-between px-12 pb-16"
+              className="w-[1224px] h-[430px] rounded-[30px] relative overflow-hidden flex items-end justify-between px-12 pb-16 z-10"
               style={{
                 background: cardBackgroundGradient,
                 ...cardBorderStyles,
-                maskImage: `radial-gradient(circle at 50% 0%, transparent ${bottomCutoutSize}, black ${parseInt(bottomCutoutSize) + 1}px)`,
-                WebkitMaskImage: `radial-gradient(circle at 50% 0%, transparent ${bottomCutoutSize}, black ${parseInt(bottomCutoutSize) + 1}px)`,
+                // UPDATED: Using explicit Ellipse dimensions
+                maskImage: bottomMask,
+                WebkitMaskImage: bottomMask,
               }}
             >
               {/* Left Side: Description */}
