@@ -21,10 +21,35 @@ const poppins = Poppins({
 });
 
 export default function ProductSection() {
-  // COLORS & STYLES
-  const cardBackgroundGradient = "linear-gradient(180deg, #1A2138 0%, #050B23 100%)";
+  // CONFIGURATION
+  const cutoutSize = "140px";
+  const bottomCutoutSize = "150px";
+
+  // --- GRADIENT CONFIGURATION ---
+  // The glow color (Golden) with transparency
+  const glowColor = "rgba(215, 181, 138, 0.5)"; 
+  const solidBg = "#050B23"; // Deep Blue
+
+  // 1. LEFT CARD: Glow starts at Bottom-Right (100% 100%)
+  const leftCardBg = `
+    radial-gradient(circle at 100% 100%, ${glowColor} 0%, transparent 50%),
+    linear-gradient(0deg, ${solidBg}, ${solidBg})
+  `;
+
+  // 2. RIGHT CARD: Glow starts at Bottom-Left (0% 100%)
+  const rightCardBg = `
+    radial-gradient(circle at 0% 100%, ${glowColor} 0%, transparent 50%),
+    linear-gradient(0deg, ${solidBg}, ${solidBg})
+  `;
+
+  // 3. BOTTOM CARD: Glow starts at Top-Center (50% 0%)
+  const bottomCardBg = `
+    radial-gradient(circle at 50% 0%, ${glowColor} 0%, transparent 50%),
+    linear-gradient(0deg, ${solidBg}, ${solidBg})
+  `;
+
   const cardBorderStyles = {
-      border: "1px solid rgba(215, 181, 138, 0.28)",
+      border: "1px solid rgba(255, 255, 255, 0.05)",
       boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.1)"
   }
 
@@ -33,12 +58,10 @@ export default function ProductSection() {
   const verticalTextStyle = `${cormorant.className} text-[20px] font-medium leading-[100%] tracking-[0.44em] uppercase text-[#D7B58A] whitespace-nowrap`;
 
   // --- ELLIPSE MASK CONFIGURATION ---
-  // To create an ellipse, we define two radii: horizontal (170px) and vertical (140px)
-  // This creates the wider, smoother curve seen in your Figma.
-  const topMask = "radial-gradient(150px 140px at 100% 100%, transparent 98%, black 100%)"; 
-  const topMaskRight = "radial-gradient(150px 140px at 0% 100%, transparent 98%, black 100%)";
-  // Bottom mask is slightly larger to accommodate the logo stack
-  const bottomMask = "radial-gradient(160px 140px at 50% 0%, transparent 98%, black 100%)";
+  // Keeping the elliptical cutouts as requested previously
+  const topMask = "radial-gradient(160px 140px at 100% 100%, transparent 98%, black 100%)"; 
+  const topMaskRight = "radial-gradient(160px 140px at 0% 100%, transparent 98%, black 100%)";
+  const bottomMask = "radial-gradient(170px 150px at 50% 0%, transparent 98%, black 100%)";
 
   return (
     <section className={`w-full bg-[#050B23] text-white pt-16 pb-32 flex flex-col items-center select-none overflow-hidden ${poppins.className}`}>
@@ -61,9 +84,8 @@ export default function ProductSection() {
             <div
               className="w-[600px] h-[420px] rounded-[30px] relative overflow-hidden"
               style={{
-                background: cardBackgroundGradient,
+                background: leftCardBg, // Use Corner Gradient
                 ...cardBorderStyles,
-                // UPDATED: Using explicit Ellipse dimensions
                 maskImage: topMask,
                 WebkitMaskImage: topMask,
               }}
@@ -95,9 +117,8 @@ export default function ProductSection() {
             <div
               className="w-[600px] h-[420px] rounded-[30px] relative overflow-hidden"
               style={{
-                background: cardBackgroundGradient,
+                background: rightCardBg, // Use Corner Gradient
                   ...cardBorderStyles,
-                // UPDATED: Using explicit Ellipse dimensions
                 maskImage: topMaskRight,
                 WebkitMaskImage: topMaskRight,
               }}
@@ -130,7 +151,6 @@ export default function ProductSection() {
               <p className={`${cormorant.className} text-[24px] tracking-[0.84em] uppercase`}>DANNY TAILORS</p>
               
               {/* --- CENTER LOGO --- */}
-              {/* Placed at the exact intersection of the ellipses */}
               <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[130px] h-[130px] z-30">
                  <Image 
                    src="/centerlogo.png" 
@@ -145,11 +165,10 @@ export default function ProductSection() {
 
           {/* ---- LOWER PART: BOTTOM CARD (UNIFORM) ---- */}
           <div
-              className="w-[1224px] h-[430px] rounded-[30px] relative overflow-hidden flex items-end justify-between px-12 pb-16 z-10"
+              className="w-[1224px] h-[450px] rounded-[30px] relative overflow-hidden flex items-end justify-between px-12 pb-16 z-10"
               style={{
-                background: cardBackgroundGradient,
+                background: bottomCardBg, // Use Corner Gradient
                 ...cardBorderStyles,
-                // UPDATED: Using explicit Ellipse dimensions
                 maskImage: bottomMask,
                 WebkitMaskImage: bottomMask,
               }}
