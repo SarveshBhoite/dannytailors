@@ -21,30 +21,44 @@ const poppins = Poppins({
 });
 
 export default function ProductSection() {
-  // CONFIGURATION
-  const cutoutSize = "140px";
-  const bottomCutoutSize = "150px";
+  
+  // =====================================================================
+  //  CUTOUT CONFIGURATION
+  // =====================================================================
+  const arcWidth = "150px";
+  const arcHeight = "130px";
+  const cornerPos = "100% 100%"; 
 
   // --- GRADIENT CONFIGURATION ---
-  // The glow color (Golden) with transparency
   const glowColor = "rgba(215, 181, 138, 0.5)"; 
-  const solidBg = "#050B23"; // Deep Blue
+  const solidAccentColor = "#D7B58A"; 
+  const solidBg = "#050B23"; 
 
-  // 1. LEFT CARD: Glow starts at Bottom-Right (100% 100%)
+  // --- NOISE TEXTURE (Base64 SVG) ---
+  // This creates the "grain" effect without needing an external image file
+  const noiseTexture = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.4'/%3E%3C/svg%3E")`;
+
+  // --- DYNAMIC MASKS ---
+  const topMask = `radial-gradient(${arcWidth} ${arcHeight} at ${cornerPos}, transparent 98%, black 100%)`; 
+  const topMaskRight = `radial-gradient(${arcWidth} ${arcHeight} at 0% 100%, transparent 98%, black 100%)`;
+  const bottomMask = `radial-gradient(160px 130px at 50% 0%, transparent 98%, black 100%)`;
+
+  // --- CARD BACKGROUNDS (LAYERED GRADIENTS) ---
   const leftCardBg = `
-    radial-gradient(circle at 100% 100%, ${glowColor} 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, ${solidAccentColor} 0%, transparent 10%),
+    radial-gradient(circle at 100% 100%, ${glowColor} 0%, transparent 55%),
     linear-gradient(0deg, ${solidBg}, ${solidBg})
   `;
 
-  // 2. RIGHT CARD: Glow starts at Bottom-Left (0% 100%)
   const rightCardBg = `
-    radial-gradient(circle at 0% 100%, ${glowColor} 0%, transparent 50%),
+    radial-gradient(circle at 0% 100%, ${solidAccentColor} 0%, transparent 10%),
+    radial-gradient(circle at 0% 100%, ${glowColor} 0%, transparent 55%),
     linear-gradient(0deg, ${solidBg}, ${solidBg})
   `;
 
-  // 3. BOTTOM CARD: Glow starts at Top-Center (50% 0%)
   const bottomCardBg = `
-    radial-gradient(circle at 50% 0%, ${glowColor} 0%, transparent 50%),
+    radial-gradient(circle at 50% 0%, ${solidAccentColor} 0%, transparent 10%),
+    radial-gradient(circle at 50% 0%, ${glowColor} 0%, transparent 55%),
     linear-gradient(0deg, ${solidBg}, ${solidBg})
   `;
 
@@ -56,12 +70,6 @@ export default function ProductSection() {
   // --- TYPOGRAPHY STYLES ---
   const descStyle = `${montserrat.className} text-[16px] font-extralight leading-[100%] tracking-[0.05em] capitalize text-white/70 antialiased`;
   const verticalTextStyle = `${cormorant.className} text-[20px] font-medium leading-[100%] tracking-[0.44em] uppercase text-[#D7B58A] whitespace-nowrap`;
-
-  // --- ELLIPSE MASK CONFIGURATION ---
-  // Keeping the elliptical cutouts as requested previously
-  const topMask = "radial-gradient(160px 140px at 100% 100%, transparent 98%, black 100%)"; 
-  const topMaskRight = "radial-gradient(160px 140px at 0% 100%, transparent 98%, black 100%)";
-  const bottomMask = "radial-gradient(170px 150px at 50% 0%, transparent 98%, black 100%)";
 
   return (
     <section className={`w-full bg-[#050B23] text-white pt-16 pb-32 flex flex-col items-center select-none overflow-hidden ${poppins.className}`}>
@@ -84,29 +92,21 @@ export default function ProductSection() {
             <div
               className="w-[600px] h-[420px] rounded-[30px] relative overflow-hidden"
               style={{
-                background: leftCardBg, // Use Corner Gradient
+                background: leftCardBg,
                 ...cardBorderStyles,
                 maskImage: topMask,
                 WebkitMaskImage: topMask,
               }}
             >
-              {/* Icon Container */}
               <div className="absolute left-10 top-10 w-[117px] h-[117px] flex items-center justify-center">
                 <div className="absolute inset-0 rounded-full border border-[#D7B58A]/30 bg-[#D7B58A]/5" />
                 <Image src="/sewing.png" alt="Tailoring" width={95} height={95} className="opacity-90 relative z-10" />
               </div>
-
-              {/* Text Description */}
               <p className={`absolute top-12 left-[190px] w-[400px] ${descStyle}`}>
                 Expertly Tailored Uniforms Designed For <br /> Precision, Comfort, And Lasting Elegance.
               </p>
-
-              {/* Vertical Text */}
               <div className="absolute left-10 top-[130px] bottom-0 w-[117px] flex items-center justify-center">
-                 <p 
-                    className={verticalTextStyle}
-                    style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
-                 >
+                 <p className={verticalTextStyle} style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
                    TAILORING
                  </p>
               </div>
@@ -117,29 +117,21 @@ export default function ProductSection() {
             <div
               className="w-[600px] h-[420px] rounded-[30px] relative overflow-hidden"
               style={{
-                background: rightCardBg, // Use Corner Gradient
+                background: rightCardBg,
                   ...cardBorderStyles,
                 maskImage: topMaskRight,
                 WebkitMaskImage: topMaskRight,
               }}
             >
-              {/* Icon Container */}
               <div className="absolute right-10 top-10 w-[117px] h-[117px] flex items-center justify-center">
                 <div className="absolute inset-0 rounded-full border border-[#D7B58A]/30 bg-[#D7B58A]/5" />
                 <Image src="/embroidery.png" alt="Embroidery" width={75} height={75} className="opacity-90 relative z-10 left-2 top-1" />
               </div>
-
-              {/* Text Description */}
               <p className={`absolute top-12 right-[170px] w-[400px] text-right ${descStyle}`}>
                 Intricate Embroidery That Brings Your Brand’s <br /> Identity To Life — One Stitch At A Time.
               </p>
-
-              {/* Vertical Text */}
               <div className="absolute right-10 top-[130px] bottom-0 w-[117px] flex items-center justify-center">
-                 <p 
-                    className={verticalTextStyle}
-                    style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
-                 >
+                 <p className={verticalTextStyle} style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
                    EMBROIDERY
                  </p>
               </div>
@@ -150,16 +142,26 @@ export default function ProductSection() {
           <div className="w-[1224px] flex justify-between items-center py-2 relative z-20">
               <p className={`${cormorant.className} text-[24px] tracking-[0.84em] uppercase`}>DANNY TAILORS</p>
               
-              {/* --- CENTER LOGO --- */}
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[130px] h-[130px] z-30">
-                 <Image 
-                   src="/centerlogo.png" 
-                   alt="Center Logo" 
-                   fill 
-                   className="object-contain"
-                 />
+              {/* === CENTRAL GRAIN GLOW === */}
+              {/* This container sits behind the logo but above the background */}
+              <div 
+                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] z-25 pointer-events-none flex items-center justify-center"
+              >
+                  {/* 1. The Gradient: Soft Golden Light */}
+                  <div className="absolute inset-0 rounded-full" 
+                       style={{ background: `radial-gradient(circle, rgba(215, 181, 138, 0.45) 0%, transparent 70%)`, filter: 'blur(30px)' }} 
+                  />
+                  
+                  {/* 2. The Grain Texture: Blended on top */}
+                  <div className="absolute inset-0 rounded-full opacity-0"
+                       style={{ backgroundImage: noiseTexture, mixBlendMode: 'overlay' }} 
+                  />
               </div>
 
+              {/* --- CENTER LOGO --- */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[130px] h-[130px] z-30">
+                 <Image src="/centerlogo.png" alt="Center Logo" fill className="object-contain" />
+              </div>
               <p className={`${cormorant.className} text-[24px] tracking-[0.84em] uppercase`}>AND CLOTHIERS</p>
           </div>
 
@@ -167,18 +169,15 @@ export default function ProductSection() {
           <div
               className="w-[1224px] h-[450px] rounded-[30px] relative overflow-hidden flex items-end justify-between px-12 pb-16 z-10"
               style={{
-                background: bottomCardBg, // Use Corner Gradient
+                background: bottomCardBg,
                 ...cardBorderStyles,
                 maskImage: bottomMask,
                 WebkitMaskImage: bottomMask,
               }}
             >
-              {/* Left Side: Description */}
               <p className={`w-[400px] ${descStyle}`}>
                 Professional Uniforms That Combine Style, <br /> Durability, And A Perfect Brand Fit.
               </p>
-
-              {/* Center Side: Icon & Title */}
               <div className="flex flex-col items-center">
                   <div className="w-[117px] h-[117px] flex items-center justify-center relative mb-6">
                     <div className="absolute inset-0 rounded-full border border-[#D7B58A]/30 bg-[#D7B58A]/5" />
@@ -188,8 +187,6 @@ export default function ProductSection() {
                     UNIFORM
                   </p>
               </div>
-
-              {/* Right Side: Link */}
               <div className="w-[400px] flex justify-end">
                 <a href="#" className={`${cormorant.className} text-[18px] tracking-[0.2em] text-[#D7B58A] uppercase underline underline-offset-8`}>
                   LEARN MORE
@@ -197,8 +194,7 @@ export default function ProductSection() {
               </div>
           </div>
       
-      </div> {/* End of Responsive Wrapper */}
-
+      </div> 
     </section>
   );
 }
