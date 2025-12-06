@@ -38,24 +38,28 @@ const blogs = [
 
 export default function BlogSection() {
   return (
-    // UPDATED: pt-0 (closer to top), pb-60 (more space at bottom)
-    <section className="w-full bg-[#050B23] text-white flex justify-center pt-0 pb-60 select-none relative z-10">
+    // SECTION SPACING: 
+    // -mt-24 pulls it up over the previous section's bottom padding.
+    // pt-0 removes top padding.
+    // pb-80 adds large spacing at the bottom.
+    <section className="w-full bg-[#050B23] text-white flex justify-center pt-0 pb-65  select-none relative z-10">
       
-      {/* MAIN CONTAINER */}
+      {/* MAIN CONTAINER: Max Width 1200px */}
       <div className="w-full max-w-[1200px] flex flex-col lg:flex-row-reverse items-start justify-between gap-16 lg:gap-8 px-6 lg:px-0">
 
         {/* ==============================================================
             RIGHT COLUMN: TEXT CONTENT
            ============================================================== */}
-        <div className="flex flex-col items-start w-full lg:w-[350px] shrink-0 pt-8">
+        {/* Increased width to w-[450px] to ensure heading fits on one line */}
+        <div className="flex flex-col items-start w-full lg:w-[450px] shrink-0 pt-24 lg:pt-32">
           
-          {/* HEADING */}
-          <h2 className={`${cormorant.className} text-[45px] leading-[120%] text-[#D2B589] uppercase mb-8`}>
-            Recent <br /> Blogs
+          {/* HEADING: "Recent Blogs" on one line */}
+          <h2 className={`${cormorant.className} text-[45px] leading-[120%] text-[#D2B589] uppercase mb-8 whitespace-nowrap`}>
+            Recent Blogs
           </h2>
 
           {/* DESCRIPTION */}
-          <p className={`${montserrat.className} text-[20px] leading-[150%] font-light text-white mb-12`}>
+          <p className={`${montserrat.className} text-[20px] leading-[150%] font-light text-white mb-12 max-w-[380px]`}>
             Enim nunc faucibus a pellentesque sit amet. Adipiscing elit duis tristique sollicitudin. Sed sed risus pretium quam vulputate.
           </p>
 
@@ -88,7 +92,6 @@ export default function BlogSection() {
               </div>
 
               {/* 2. CONTENT CARD (Overlapping) */}
-              {/* UPDATED: Fixed height h-[260px] ensures both white boxes are exactly the same size */}
               <div 
                 className="
                   absolute left-[10%] right-0 top-[71%] 
