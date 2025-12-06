@@ -149,7 +149,7 @@ export default function ProductGrid() {
             <p
               className={`${cormorant.className} text-[18px] sm:text-[22px] tracking-[0.3em] sm:tracking-[0.4em] uppercase text-[#D2B589] text-center`}
             >
-              Since Last 2 Decades
+              Since Last <span className="text-[1.6em]">2</span> Decades
             </p>
           </div>
 
@@ -243,7 +243,8 @@ export default function ProductGrid() {
               <p
                 className={`${cormorant.className} text-[24px] lg:text-[30px] tracking-[0.35em] lg:tracking-[0.45em] uppercase text-[#D2B589] text-center whitespace-nowrap`}
               >
-                Since Last 2 Decades
+                {/* UPDATED: Wrapped '2' in a span with text-[1.2em] to make it larger */}
+                Since Last <span className="text-[1.6em]">2</span> Decades
               </p>
             </div>
 
