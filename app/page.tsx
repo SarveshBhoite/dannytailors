@@ -1,8 +1,10 @@
+import BlogSection from "@/components/BlogSection";
 import FooterSection from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Navbar from "@/components/Navbar";
 import ProductGrid from "@/components/ProductGrid";
 import ProductSection from "@/components/Productsection";
+import SubscribeSection from "@/components/Subscribe";
 import Testimonials from "@/components/Testimonials";
 import VideoSection from "@/components/VideoSection";
 
@@ -15,6 +17,8 @@ export default function Home() {
       <ProductGrid />
       <VideoSection />
       <Testimonials />
+      <SubscribeSection />
+      <BlogSection />
       <FooterSection />
     </main>
   );
