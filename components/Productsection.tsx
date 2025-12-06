@@ -97,7 +97,7 @@ export default function ProductSection() {
 
   return (
     <section
-      className={`w-full bg-[#050B23] text-white pt-10 pb-16 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-32 flex flex-col items-center select-none overflow-hidden ${poppins.className}`}
+      className={`w-full bg-[#050B23] text-white pt-10 pb-16 sm:pt-12 sm:pb-20 lg:pt-16 lg:pb-12 flex flex-col items-center select-none overflow-hidden ${poppins.className}`}
     >
       {/* ============================================================= */}
       {/* MOBILE LAYOUT (Default - visible below lg breakpoint) */}
