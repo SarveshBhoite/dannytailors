@@ -1,6 +1,7 @@
 import FooterSection from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Navbar from "@/components/Navbar";
+import ProductGrid from "@/components/ProductGrid";
 import ProductSection from "@/components/Productsection";
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
       <Navbar />
       <HeroSection />
       <ProductSection />
+      <ProductGrid />
       <FooterSection />
     </main>
   );
