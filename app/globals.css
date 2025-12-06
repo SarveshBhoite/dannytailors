@@ -57,8 +57,7 @@ body {
   font-family: var(--font-cinzel);
 }
 
-/* Desktop / large screens */
-
+/* Desktop responsive text */
 @media (min-width: 1024px) {
   .for {
     font-size: 60px;

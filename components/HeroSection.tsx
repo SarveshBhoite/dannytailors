@@ -191,7 +191,7 @@ export default function HeroSection() {
       </main>
 
       {/* bottom strip */}
-      <div className="relative z-20 w-full bg-gradient-to-r from-[#D2B589] to-[#6C5D46] py-2 md:py-3 text-center text-[0.55rem] tracking-[0.25em] sm:text-[0.65rem] sm:tracking-[0.4em] md:text-sm md:tracking-[0.9em] uppercase strip-text">
+      <div className="relative z-20 w-full bg-gradient-to-r from-[#6C5D46] via-[#D2B589] to-[#6C5D46] py-2 md:py-3 text-center text-[0.55rem] tracking-[0.25em] sm:text-[0.65rem] sm:tracking-[0.4em] md:text-sm md:tracking-[0.9em] uppercase strip-text">
         Excelling&nbsp;&nbsp;Since&nbsp;&nbsp;
         <span className="number">2000</span>
       </div>
