@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import Navbar from "@/components/Navbar";
 import ProductGrid from "@/components/ProductGrid";
 import ProductSection from "@/components/Productsection";
+import VideoSection from "@/components/VideoSection";
 
 export default function Home() {
   return (
@@ -11,6 +12,7 @@ export default function Home() {
       <HeroSection />
       <ProductSection />
       <ProductGrid />
+      <VideoSection />
       <FooterSection />
     </main>
   );
