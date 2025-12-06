@@ -3,6 +3,7 @@ import HeroSection from "@/components/HeroSection";
 import Navbar from "@/components/Navbar";
 import ProductGrid from "@/components/ProductGrid";
 import ProductSection from "@/components/Productsection";
+import Testimonials from "@/components/Testimonials";
 import VideoSection from "@/components/VideoSection";
 
 export default function Home() {
@@ -13,6 +14,7 @@ export default function Home() {
       <ProductSection />
       <ProductGrid />
       <VideoSection />
+      <Testimonials />
       <FooterSection />
     </main>
   );
