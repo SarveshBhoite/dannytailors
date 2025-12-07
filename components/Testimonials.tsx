@@ -180,7 +180,7 @@ export default function Testimonials() {
                       <p
                         className={`${mont.className} text-[12px] sm:text-[13px] leading-[175%] text-white/80 font-normal`}
                       >
-                        "{item.text}"
+                        {item.text}
                       </p>
                     </div>
                   </div>
@@ -261,7 +261,7 @@ export default function Testimonials() {
                     <p
                       className={`${mont.className} text-[13px] lg:text-[14px] leading-[160%] uppercase text-white font-medium w-full`}
                     >
-                      "{item.text}"
+                      {item.text}
                     </p>
                   </div>
                 </div>

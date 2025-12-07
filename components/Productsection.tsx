@@ -183,7 +183,7 @@ export default function ProductSection() {
             <p
               className={`absolute top-[120px] sm:top-[145px] left-5 right-5 text-center ${descStyle}`}
             >
-              Intricate Embroidery That Brings Your Brand's Identity To Life —
+              Intricate Embroidery That Brings Your Brands Identity To Life —
               One Stitch At A Time.
             </p>
           </div>
@@ -334,7 +334,7 @@ export default function ProductSection() {
             <p
               className={`absolute top-12 right-[170px] w-[400px] text-right ${montserrat.className} text-[16px] font-extralight leading-[100%] tracking-[0.05em] capitalize text-white/70 antialiased`}
             >
-              Intricate Embroidery That Brings Your Brand's <br /> Identity To
+              Intricate Embroidery That Brings Your Brands <br /> Identity To
               Life — One Stitch At A Time.
             </p>
             <div className="absolute right-10 top-[130px] bottom-0 w-[117px] flex items-center justify-center">
