@@ -1,10 +1,70 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+  const pathname = usePathname();
+
+  // Observe sections on /products page to highlight active nav item
+  useEffect(() => {
+    if (pathname !== "/products") {
+      setActiveSection(null);
+      return;
+    }
+
+    const ids = ["aprons", "chefcoats", "uniforms", "pants"];
+    const sections = ids
+      .map((id) => document.getElementById(id))
+      .filter(Boolean) as HTMLElement[];
+
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+
+        if (visible[0]) {
+          const id = visible[0].target.id;
+          setActiveSection(id);
+        }
+      },
+      {
+        root: null,
+        threshold: 0.4, // ~40% of section in view
+      }
+    );
+
+    sections.forEach((sec) => observer.observe(sec));
+
+    // initialize from hash if any
+    if (window.location.hash) {
+      const hashId = window.location.hash.replace("#", "");
+      if (ids.includes(hashId)) {
+        setActiveSection(hashId);
+      }
+    }
+
+    return () => observer.disconnect();
+  }, [pathname]);
+
+  // base classes for links in side menu
+  const navLinkBase =
+    "flex w-full items-center justify-between border-b border-white/10 pb-3 uppercase tracking-[0.25em] hover:text-[#f2d39a] transition-colors";
+
+  const makeLinkClass = (id: string) => {
+    const isActive = pathname === "/products" && activeSection === id;
+    return (
+      navLinkBase +
+      (isActive ? " text-[#f2d39a]" : " text-white")
+    );
+  };
 
   return (
     <>
@@ -41,7 +101,8 @@ export default function Navbar() {
         {/* RIGHT BUTTONS */}
         <div className="pointer-events-auto flex items-center gap-2 sm:gap-3 md:gap-4">
           {/* SHOP NOW — hide on small screens */}
-          <button
+          <Link
+            href="/products"
             className="
             relative hidden md:inline-flex 
             items-center gap-2 px-[18px] py-[13.5px] 
@@ -80,7 +141,7 @@ export default function Navbar() {
                 strokeDasharray="12 4.5"
               />
             </svg>
-          </button>
+          </Link>
 
           {/* CART ICON */}
           <button
@@ -160,15 +221,53 @@ export default function Navbar() {
           </h3>
 
           <nav className="space-y-3 sm:space-y-4 text-xs">
-            {["Aprons", "Chef Coats", "Uniforms", "Pants"].map((item) => (
-              <button
-                key={item}
-                className="flex w-full items-center justify-between border-b border-white/10 pb-3 uppercase tracking-[0.25em] hover:text-[#f2d39a] transition-colors"
-              >
-                {item}
-                <span className="text-xs text-[#f2d39a]">&lt;</span>
-              </button>
-            ))}
+            <Link
+              href="/products#aprons"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setActiveSection("aprons");
+              }}
+              className={makeLinkClass("aprons")}
+            >
+              Aprons
+              <span className="text-xs text-[#f2d39a]">&lt;</span>
+            </Link>
+
+            <Link
+              href="/products#chefcoats"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setActiveSection("chefcoats");
+              }}
+              className={makeLinkClass("chefcoats")}
+            >
+              Chef Coats
+              <span className="text-xs text-[#f2d39a]">&lt;</span>
+            </Link>
+
+            <Link
+              href="/products#uniforms"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setActiveSection("uniforms");
+              }}
+              className={makeLinkClass("uniforms")}
+            >
+              Uniforms
+              <span className="text-xs text-[#f2d39a]">&lt;</span>
+            </Link>
+
+            <Link
+              href="/products#pants"
+              onClick={() => {
+                setIsMenuOpen(false);
+                setActiveSection("pants");
+              }}
+              className={makeLinkClass("pants")}
+            >
+              Pants
+              <span className="text-xs text-[#f2d39a]">&lt;</span>
+            </Link>
           </nav>
 
           {/* Mobile Shop Now in Menu */}
