@@ -2,6 +2,7 @@ import BlogSection from "@/components/BlogSection";
 import FooterSection from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import Navbar from "@/components/Navbar";
+import ProductCarousel from "@/components/ProductCarousel";
 import ProductGrid from "@/components/ProductGrid";
 import ProductSection from "@/components/Productsection";
 import SubscribeSection from "@/components/Subscribe";
@@ -15,6 +16,7 @@ export default function Home() {
       <HeroSection />
       <ProductSection />
       <ProductGrid />
+      <ProductCarousel />
       <VideoSection />
       <Testimonials />
       <SubscribeSection />
