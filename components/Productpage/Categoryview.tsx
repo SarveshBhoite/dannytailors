@@ -94,16 +94,15 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
   };
   const halfWidth = borderConfig.width / 2;
 
-  // Outer Border Component
+  // Outer Border Component (Square corners)
   const OuterDashedBorder = () => (
-    <div className="absolute inset-0 pointer-events-none rounded-[15.34px] overflow-hidden z-20">
+    <div className="absolute inset-0 pointer-events-none z-20">
       <svg className="w-full h-full">
         <rect 
           x={halfWidth} 
           y={halfWidth} 
           width={`calc(100% - ${borderConfig.width}px)`} 
           height={`calc(100% - ${borderConfig.width}px)`} 
-          rx="15.34" 
           fill="none" 
           stroke={borderConfig.color} 
           strokeWidth={borderConfig.width} 
@@ -138,7 +137,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
   );
 
   return (
-    <section className="min-h-screen bg-[#000A23] text-white pt-32 pb-20 select-none">
+    <section className="min-h-screen bg-[#000A23] text-white pt-26 pb-20 select-none">
       
       {/* MAIN CONTAINER */}
       <div className="max-w-[1224px] mx-auto px-6 lg:px-0 relative">
@@ -156,19 +155,24 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                 />
                 <div className="absolute inset-0 bg-black/30" />
                 
-                {/* UPDATED TEXT ALIGNMENT: 
-                   - whitespace-nowrap to force one line
-                   - w-full to allow full width usage
-                   - justify-end items-center to bottom-center text (or items-start for left) 
+                {/* UPDATED TEXT CONTAINER: 
+                   - justify-end: Pushes to bottom
+                   - items-center: Centers horizontally
+                   - w-full px-4: Ensures full width for centering with padding safety
                 */}
                 <div className="absolute inset-0 flex flex-col justify-end items-center pb-12 md:pb-16 w-full px-4">
-                    <h1 className={`${montserrat.className} text-[32px] md:text-[60px] lg:text-[80px] font-bold text-white uppercase tracking-[0.14em] leading-none drop-shadow-lg whitespace-nowrap text-center`}>
+                    {/* UPDATED TEXT: 
+                       - whitespace-nowrap: Forces single line
+                       - text-center: Ensures text is centered
+                       - Removed max-w restriction
+                    */}
+                    <h1 className={`${montserrat.className} text-[26px] md:text-[60px] lg:text-[80px] font-bold text-white uppercase tracking-[0.14em] leading-none drop-shadow-lg whitespace-nowrap text-center`}>
                         BESPOKE TAILORING
                     </h1>
                 </div>
             </div>
 
-            {/* BUTTON */}
+            {/* Shop Now Button */}
             <div className="absolute -bottom-[19px] md:-bottom-[25px] left-1/2 -translate-x-1/2 z-30">
                 <button className="relative flex items-center justify-center gap-2 w-[102px] h-[38px] md:w-[140px] md:h-[50px] bg-[#000A23] rounded-[8px] group/btn shadow-lg">
                     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 140 50" fill="none" preserveAspectRatio="none">
@@ -191,7 +195,6 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
 
           {/* LEFT SIDEBAR */}
           <aside className="w-full lg:w-[200px] shrink-0 flex flex-col gap-0">
-            {/* Count */}
             <div className="h-[39px] flex items-center border-b border-[#ffffff]/100 mb-2">
                <span className="text-white block pt-1" style={maisonNeueStyle}>249 Products</span>
             </div>
@@ -280,7 +283,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
             {/* PRODUCT GRID - FULLY CUSTOM SVG GRID (SQUARE CORNERS) */}
             <div className="relative">
                 
-                {/* 1. OUTER BORDER (Absolute SVG overlay) */}
+                {/* 1. OUTER BORDER (Absolute SVG overlay) - SQUARE corners */}
                 <OuterDashedBorder />
 
                 {/* 2. GRID CONTENT */}
