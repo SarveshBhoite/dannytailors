@@ -174,7 +174,7 @@ function FAQSection() {
 
 export default function Products() {
     return (
-        <div className={`${montserrat.className} min-h-screen bg-[#000a23] px-4 pb-12 pt-24 md:px-8 lg:px-16`}>
+        <div className={`${montserrat.className} min-h-screen bg-[#000a23] px-4 pb-12 pt-26 md:px-8 lg:px-16`}>
             <div className="relative mx-auto max-w-7xl overflow-hidden">
                 <svg className="pointer-events-none absolute inset-0 h-full w-full" viewBox="0 0 1600 900" preserveAspectRatio="none">
                     <rect x="0.75" y="0.75" width="1598.5" height="898.5" rx="15.34" ry="15.34" fill="none" stroke="#212F52" strokeWidth="1.53" strokeDasharray="12.27 4.60" />

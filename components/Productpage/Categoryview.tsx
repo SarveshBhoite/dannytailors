@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Montserrat, Montserrat_Alternates } from "next/font/google";
 
 // 1. CONFIGURE FONTS
@@ -12,7 +12,7 @@ interface CategoryViewProps {
   categorySlug: string;
 }
 
-// Filter Data
+// --- CONSTANTS & DATA ---
 const CATEGORIES_LIST = [
   "Accessories & Gift Cards",
   "Backpacks, Weekenders & Duffle Bags",
@@ -39,8 +39,157 @@ const COLORS_LIST = [
 const SIZES_LIST = ["30", "32", "34", "36", "38", "40", "42", "44", "46", "48", "50"];
 const CLOTHING_SIZE_LIST = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
+// EXACT TYPOGRAPHY STYLES (Moved outside to be accessible by all components)
+const maisonNeueStyle = {
+  fontFamily: '"Maison Neue", sans-serif',
+  fontSize: '10.49px',
+  lineHeight: '13.99px',
+  letterSpacing: '0.17px',
+  fontWeight: 400,
+};
+
+// --- SVG BORDER COMPONENTS (Moved Outside) ---
+const borderConfig = {
+  color: "#212F52",
+  width: 1.53,
+  dashArray: "12 8", 
+};
+const halfWidth = borderConfig.width / 2;
+
+const OuterDashedBorder = () => (
+  <div className="absolute inset-0 pointer-events-none z-20">
+    <svg className="w-full h-full">
+      <rect 
+        x={halfWidth} 
+        y={halfWidth} 
+        width={`calc(100% - ${borderConfig.width}px)`} 
+        height={`calc(100% - ${borderConfig.width}px)`} 
+        fill="none" 
+        stroke={borderConfig.color} 
+        strokeWidth={borderConfig.width} 
+        strokeDasharray={borderConfig.dashArray} 
+      />
+    </svg>
+  </div>
+);
+
+const InternalDashedBorderRight = ({ className = "" }: { className?: string }) => (
+  <div className={`absolute top-0 right-0 h-full pointer-events-none z-10 ${className}`} style={{ width: borderConfig.width }}>
+    <svg className="w-full h-full overflow-visible">
+      <line 
+        x1={halfWidth} y1="0" x2={halfWidth} y2="100%" 
+        stroke={borderConfig.color} strokeWidth={borderConfig.width} strokeDasharray={borderConfig.dashArray} 
+      />
+    </svg>
+  </div>
+);
+
+const InternalDashedBorderBottom = ({ className = "" }: { className?: string }) => (
+  <div className={`absolute bottom-0 left-0 w-full pointer-events-none z-10 ${className}`} style={{ height: borderConfig.width }}>
+    <svg className="w-full h-full overflow-visible">
+      <line 
+        x1="0" y1={halfWidth} x2="100%" y2={halfWidth} 
+        stroke={borderConfig.color} strokeWidth={borderConfig.width} strokeDasharray={borderConfig.dashArray} 
+      />
+    </svg>
+  </div>
+);
+
+// --- FILTER SIDEBAR COMPONENT (Moved Outside) ---
+// We define the props needed for this component to work
+interface FilterPanelProps {
+  openSections: { category: boolean; color: boolean; size: boolean; clothing: boolean };
+  toggleSection: (section: keyof FilterPanelProps['openSections']) => void;
+  visibleCategories: string[];
+  showAllCategories: boolean;
+  setShowAllCategories: (v: boolean) => void;
+}
+
+const FilterPanel = ({ 
+  openSections, 
+  toggleSection, 
+  visibleCategories, 
+  showAllCategories, 
+  setShowAllCategories 
+}: FilterPanelProps) => (
+  <>
+    {/* Category Filter */}
+    <div className="py-4 border-b border-[#ffffff]/100">
+      <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('category')}>
+        <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Category</span>
+        <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.category ? 'rotate-0' : 'rotate-180'}`}>▲</span>
+      </div>
+      {openSections.category && (
+        <div className="flex flex-col gap-2">
+          {visibleCategories.map((item) => (
+            <label key={item} className="flex items-center gap-2 cursor-pointer group">
+              <div className="w-[20px] h-[20px] rounded-[3.5px] border-[0.5px] border-[#212F52] bg-[#212F52] flex items-center justify-center shrink-0"></div>
+              <span className="text-white/80 group-hover:text-white transition-colors leading-tight" style={maisonNeueStyle}>{item}</span>
+            </label>
+          ))}
+          <button onClick={() => setShowAllCategories(!showAllCategories)} className={`${montserrat.className} text-[10.5px] text-[#D2B589] hover:underline text-left mt-1`}>{showAllCategories ? "View Less -" : "View More +"}</button>
+        </div>
+      )}
+    </div>
+
+    {/* Color Filter */}
+    <div className="py-4 border-b border-[#ffffff]/100">
+      <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('color')}>
+        <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Color</span>
+        <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.color ? 'rotate-0' : 'rotate-180'}`}>▲</span>
+      </div>
+      {openSections.color && (
+        <div className="grid grid-cols-3 gap-y-4 gap-x-2">
+          {COLORS_LIST.map((c) => (
+            <div key={c.name} className="flex flex-col items-center gap-2 cursor-pointer group">
+              <div className="w-[28px] h-[28px] rounded-full" style={{ backgroundColor: c.hex }} />
+              <span className={`${montAlt.className} text-[10px] text-white group-hover:text-[#D2B589] transition-colors`}>{c.name}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+
+    {/* Size Filter */}
+    <div className="py-4 border-b border-[#ffffff]/100">
+      <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('size')}>
+        <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Size</span>
+        <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.size ? 'rotate-0' : 'rotate-180'}`}>▲</span>
+      </div>
+      {openSections.size && (
+        <div className="flex flex-col gap-3">
+          <div>
+            <p className={`${montAlt.className} text-[10.5px] text-[#D2B589] mb-3`}>Waist</p>
+            <div className="grid grid-cols-4 gap-2">
+              {SIZES_LIST.map((s) => (
+                <div key={s} className="w-[40px] h-[37px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors" style={maisonNeueStyle}>{s}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* Clothing Filter */}
+    <div className="py-4">
+      <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('clothing')}>
+        <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Clothing</span>
+        <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.clothing ? 'rotate-0' : 'rotate-180'}`}>▲</span>
+      </div>
+      {openSections.clothing && (
+        <div className="grid grid-cols-4 gap-2">
+          {CLOTHING_SIZE_LIST.map((size) => (
+            <div key={size} className="w-[40px] h-[40px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors" style={maisonNeueStyle}>{size}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  </>
+);
+
+
+// --- MAIN COMPONENT ---
 export default function CategoryView({ categorySlug }: CategoryViewProps) {
-  // --- STATE ---
   const [openSections, setOpenSections] = useState({
     category: true,
     color: true,
@@ -56,6 +205,16 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
   };
 
   const visibleCategories = showAllCategories ? CATEGORIES_LIST : CATEGORIES_LIST.slice(0, 4);
+
+  // Lock body scroll
+  useEffect(() => {
+    if (isMobileFilterOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => { document.body.style.overflow = "unset"; };
+  }, [isMobileFilterOpen]);
 
   // --- LOGIC ---
   const safeSlug = categorySlug || "";
@@ -77,142 +236,6 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
         type: "Womenswear" 
     };
   });
-
-  // TYPOGRAPHY STYLES
-  const maisonNeueStyle = {
-    fontFamily: '"Maison Neue", sans-serif',
-    fontSize: '10.49px',
-    lineHeight: '13.99px',
-    letterSpacing: '0.17px',
-    fontWeight: 400,
-  };
-
-  // SVG Borders
-  const borderConfig = {
-    color: "#212F52",
-    width: 1.53,
-    dashArray: "12 8", 
-  };
-  const halfWidth = borderConfig.width / 2;
-
-  // Outer Border Component (Square corners)
-  const OuterDashedBorder = () => (
-    <div className="absolute inset-0 pointer-events-none z-20">
-      <svg className="w-full h-full">
-        <rect 
-          x={halfWidth} 
-          y={halfWidth} 
-          width={`calc(100% - ${borderConfig.width}px)`} 
-          height={`calc(100% - ${borderConfig.width}px)`} 
-          fill="none" 
-          stroke={borderConfig.color} 
-          strokeWidth={borderConfig.width} 
-          strokeDasharray={borderConfig.dashArray} 
-        />
-      </svg>
-    </div>
-  );
-
-  // Internal Right Border Component
-  const InternalDashedBorderRight = ({ className = "" }: { className?: string }) => (
-    <div className={`absolute top-0 right-0 h-full pointer-events-none z-10 ${className}`} style={{ width: borderConfig.width }}>
-      <svg className="w-full h-full overflow-visible">
-        <line 
-          x1={halfWidth} y1="0" x2={halfWidth} y2="100%" 
-          stroke={borderConfig.color} strokeWidth={borderConfig.width} strokeDasharray={borderConfig.dashArray} 
-        />
-      </svg>
-    </div>
-  );
-
-  // Internal Bottom Border Component
-  const InternalDashedBorderBottom = ({ className = "" }: { className?: string }) => (
-    <div className={`absolute bottom-0 left-0 w-full pointer-events-none z-10 ${className}`} style={{ height: borderConfig.width }}>
-      <svg className="w-full h-full overflow-visible">
-        <line 
-          x1="0" y1={halfWidth} x2="100%" y2={halfWidth} 
-          stroke={borderConfig.color} strokeWidth={borderConfig.width} strokeDasharray={borderConfig.dashArray} 
-        />
-      </svg>
-    </div>
-  );
-
-  // Filter Sidebar Content Component (reusable for both mobile and desktop) - WITHOUT product count
-  const FilterContent = () => (
-    <>
-      {/* Category Filter */}
-      <div className="py-4 border-b border-[#ffffff]/100">
-        <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('category')}>
-          <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Category</span>
-          <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.category ? 'rotate-0' : 'rotate-180'}`}>▲</span>
-        </div>
-        {openSections.category && (
-          <div className="flex flex-col gap-2">
-            {visibleCategories.map((item) => (
-              <label key={item} className="flex items-center gap-2 cursor-pointer group">
-                <div className="w-[20px] h-[20px] rounded-[3.5px] border-[0.5px] border-[#212F52] bg-[#212F52] flex items-center justify-center shrink-0"></div>
-                <span className="text-white/80 group-hover:text-white transition-colors leading-tight" style={maisonNeueStyle}>{item}</span>
-              </label>
-            ))}
-            <button onClick={() => setShowAllCategories(!showAllCategories)} className={`${montserrat.className} text-[10.5px] text-[#D2B589] hover:underline text-left mt-1`}>{showAllCategories ? "View Less -" : "View More +"}</button>
-          </div>
-        )}
-      </div>
-
-      {/* Color Filter */}
-      <div className="py-4 border-b border-[#ffffff]/100">
-        <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('color')}>
-          <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Color</span>
-          <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.color ? 'rotate-0' : 'rotate-180'}`}>▲</span>
-        </div>
-        {openSections.color && (
-          <div className="grid grid-cols-3 gap-y-4 gap-x-2">
-            {COLORS_LIST.map((c) => (
-              <div key={c.name} className="flex flex-col items-center gap-2 cursor-pointer group">
-                <div className="w-[28px] h-[28px] rounded-full" style={{ backgroundColor: c.hex }} />
-                <span className={`${montAlt.className} text-[10px] text-white group-hover:text-[#D2B589] transition-colors`}>{c.name}</span>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Size Filter */}
-      <div className="py-4 border-b border-[#ffffff]/100">
-        <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('size')}>
-          <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Size</span>
-          <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.size ? 'rotate-0' : 'rotate-180'}`}>▲</span>
-        </div>
-        {openSections.size && (
-          <div className="flex flex-col gap-3">
-            <div>
-              <p className={`${montAlt.className} text-[10.5px] text-[#D2B589] mb-3`}>Waist</p>
-              <div className="grid grid-cols-4 gap-2">
-                {SIZES_LIST.map((s) => (
-                  <div key={s} className="w-[40px] h-[37px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors" style={maisonNeueStyle}>{s}</div>
-                ))}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Clothing Filter */}
-      <div className="py-4">
-        <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('clothing')}>
-          <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Clothing</span>
-          <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.clothing ? 'rotate-0' : 'rotate-180'}`}>▲</span>
-        </div>
-        {openSections.clothing && (
-          <div className="grid grid-cols-4 gap-2">
-            {CLOTHING_SIZE_LIST.map((size) => (
-              <div key={size} className="w-[40px] h-[40px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors" style={maisonNeueStyle}>{size}</div>
-            ))}
-          </div>
-        )}
-      </div>
-    </>
-  );
 
   return (
     <section className="min-h-screen bg-[#000A23] text-white pt-26 pb-20 select-none">
@@ -251,12 +274,18 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
           </button>
         </div>
 
-        {/* Mobile Sidebar Content - Scrollable */}
+        {/* Mobile Sidebar Content */}
         <div className="flex-1 overflow-y-auto px-5">
-          <FilterContent />
+          <FilterPanel 
+            openSections={openSections} 
+            toggleSection={toggleSection} 
+            visibleCategories={visibleCategories} 
+            showAllCategories={showAllCategories} 
+            setShowAllCategories={setShowAllCategories} 
+          />
         </div>
 
-        {/* Mobile Sidebar Footer - Apply Button */}
+        {/* Mobile Sidebar Footer */}
         <div className="shrink-0 bg-[#000A23] border-t border-[#212F52] p-4">
           <button 
             onClick={() => setIsMobileFilterOpen(false)}
@@ -312,11 +341,17 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
 
           {/* LEFT SIDEBAR - DESKTOP ONLY */}
           <aside className="hidden lg:flex w-full lg:w-[200px] shrink-0 flex-col gap-0">
-            {/* Product Count - Desktop Only */}
             <div className="h-[39px] flex items-center border-b border-[#ffffff]/100 mb-2">
-              <span className="text-white block pt-1" style={maisonNeueStyle}>249 Products</span>
+               <span className="text-white block pt-1" style={maisonNeueStyle}>249 Products</span>
             </div>
-            <FilterContent />
+            {/* Using the External Component */}
+            <FilterPanel 
+              openSections={openSections} 
+              toggleSection={toggleSection} 
+              visibleCategories={visibleCategories} 
+              showAllCategories={showAllCategories} 
+              setShowAllCategories={setShowAllCategories} 
+            />
           </aside>
 
           {/* RIGHT GRID */}
@@ -347,48 +382,22 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
               </h2>
             </div>
 
-            {/* PRODUCT GRID - FULLY CUSTOM SVG GRID (SQUARE CORNERS) */}
+            {/* PRODUCT GRID */}
             <div className="relative">
-                
-                {/* 1. OUTER BORDER (Absolute SVG overlay) - SQUARE corners */}
                 <OuterDashedBorder />
-
-                {/* 2. GRID CONTENT */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                     {products.map((product, index) => (
                         <div 
                         key={product.id} 
-                        className={`
-                            relative
-                            flex flex-col 
-                            bg-[#000A23] 
-                            p-[23px] 
-                            gap-[23px]
-                        `}
+                        className={`relative flex flex-col bg-[#000A23] p-[23px] gap-[23px]`}
                         >
-                            {/* --- INTERNAL RIGHT BORDER SVG --- */}
                             <InternalDashedBorderRight className="block md:[&:nth-child(2n)]:hidden lg:[&:nth-child(2n)]:block lg:[&:nth-child(3n)]:hidden" />
+                            <InternalDashedBorderBottom className={`block last:hidden ${index >= products.length - (products.length % 3 || 3) ? "lg:hidden" : ""} ${index >= products.length - (products.length % 2 || 2) ? "md:hidden" : ""}`} />
 
-                            {/* --- INTERNAL BOTTOM BORDER SVG --- */}
-                            <InternalDashedBorderBottom className={`
-                                block
-                                last:hidden
-                                ${index >= products.length - (products.length % 3 || 3) ? "lg:hidden" : ""}
-                                ${index >= products.length - (products.length % 2 || 2) ? "md:hidden" : ""}
-                            `} />
-
-
-                            {/* IMAGE */}
                             <div className="relative w-full h-[296px] bg-[#D9D9D9] rounded-t-[38px] overflow-hidden">
-                                <Image 
-                                src={product.image}
-                                alt={product.name}
-                                fill
-                                className="object-cover transition-transform duration-700 group-hover:scale-105"
-                                />
+                                <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
                             </div>
 
-                            {/* CONTENT */}
                             <div className="flex flex-col gap-[15px]">
                                 <div className="flex justify-between items-center h-[48px]">
                                     <div className="flex items-center justify-center bg-[#212F52] rounded-[76px] px-[12px] py-[7px] h-[36px]">
@@ -396,7 +405,6 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                                             {product.type}
                                         </span>
                                     </div>
-
                                     <button className="relative flex items-center justify-center gap-1 w-[121px] h-[48px] bg-[#000A23] rounded-[9px] group/btn">
                                         <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 121 48" fill="none" preserveAspectRatio="none">
                                             <rect x="0.5" y="0.5" width="120" height="47" rx="9" stroke="#8B744B" strokeWidth="0.76" strokeDasharray="4 2"/>
@@ -405,18 +413,15 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                                         <div className="absolute top-0 right-0 w-[12px] h-[12px] border-t border-r border-[#D2B589] rounded-tr-[9px]" />
                                         <div className="absolute bottom-0 right-0 w-[12px] h-[12px] border-b border-r border-[#D2B589] rounded-br-[9px]" />
                                         <div className="absolute bottom-0 left-0 w-[12px] h-[12px] border-b border-l border-[#D2B589] rounded-bl-[9px]" />
-                                        
                                         <span className={`${montserrat.className} text-[13.8px] font-normal text-white`}>Buy Now</span>
                                         <svg width="10" height="10" viewBox="0 0 12 12" fill="none" className="transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5">
                                             <path d="M1 11L11 1M11 1H3.5M11 1V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                                         </svg>
                                     </button>
                                 </div>
-
                                 <h3 className={`${montserrat.className} text-[18.4px] font-medium text-white leading-[150%]`}>
                                     {product.name}
                                 </h3>
-
                                 <div className="flex items-center gap-[15px]">
                                     <div className="flex items-center gap-[6px]">
                                         <span className={`${montAlt.className} text-[13.8px] text-[#81807E]`}>Fit</span>
@@ -434,9 +439,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                     ))}
                 </div>
             </div>
-
           </main>
-
         </div>
       </div>
     </section>
