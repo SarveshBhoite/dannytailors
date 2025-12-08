@@ -322,38 +322,30 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
 
           {/* RIGHT GRID */}
           <main className="flex-1 w-full">
-            {/* Mobile Filter Button & Breadcrumb Row */}
-            <div className="mb-6 flex flex-col gap-4">
-              {/* Mobile Filter Toggle Button */}
+            {/* Mobile: Product Count & Filter Button Row */}
+            <div className="lg:hidden flex items-center justify-between border-b border-[#ffffff]/100 h-[39px] mb-4">
+              <span className="text-white" style={maisonNeueStyle}>249 Products</span>
               <button 
                 onClick={() => setIsMobileFilterOpen(true)}
-                className="lg:hidden flex items-center justify-center gap-3 w-full py-3 bg-[#212F52] rounded-lg border border-[#D2B589]/30 hover:border-[#D2B589] transition-colors group"
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D2B589" strokeWidth="2">
+                <span className={`${montserrat.className} text-[11px] font-medium text-[#D2B589] uppercase tracking-wider`}>
+                  Filters
+                </span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D2B589" strokeWidth="2">
                   <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <span className={`${montserrat.className} text-[13px] font-medium text-[#D2B589] uppercase tracking-wider`}>
-                  Filters & Categories
-                </span>
-                <div className="flex items-center justify-center bg-[#D2B589] text-[#000A23] text-[11px] font-bold w-5 h-5 rounded-full">
-                  4
-                </div>
               </button>
+            </div>
 
-              {/* Product Count - Mobile Only */}
-              <div className="lg:hidden h-[39px] flex items-center border-b border-[#ffffff]/100">
-                <span className="text-white block pt-1" style={maisonNeueStyle}>249 Products</span>
-              </div>
-
-              {/* Breadcrumb & Title */}
-              <div className="flex flex-col justify-center gap-1 pb-0 h-auto lg:h-[39px]">
-                <p className={`${montserrat.className} text-[10.5px] text-[#737373] uppercase tracking-wider`}>
-                  Home / {categoryName}
-                </p>
-                <h2 className={`${montserrat.className} text-[24px] lg:text-[28px] text-white font-normal capitalize leading-none pt-1`}>
-                  {categoryName} - New Arrivals
-                </h2>
-              </div>
+            {/* Breadcrumb & Title */}
+            <div className="mb-6 flex flex-col justify-center gap-1 pb-0 h-auto lg:h-[39px]">
+              <p className={`${montserrat.className} text-[10.5px] text-[#737373] uppercase tracking-wider`}>
+                Home / {categoryName}
+              </p>
+              <h2 className={`${montserrat.className} text-[24px] lg:text-[28px] text-white font-normal capitalize leading-none pt-1`}>
+                {categoryName} - New Arrivals
+              </h2>
             </div>
 
             {/* PRODUCT GRID - FULLY CUSTOM SVG GRID (SQUARE CORNERS) */}
