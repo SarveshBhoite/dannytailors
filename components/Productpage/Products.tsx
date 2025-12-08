@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useState } from "react";
 import { Montserrat, Montserrat_Alternates } from "next/font/google";
+import Link from "next/link";
 
 // ---------- FONTS ----------
 const montserrat = Montserrat({
@@ -477,7 +478,7 @@ export default function Products() {
                                     {collection.title}
                                 </h2>
 
-                                <button className="relative inline-flex items-center gap-2 px-[18px] py-[13px] text-[0.75rem] tracking-[0.15em] text-[#FFFFFF]">
+                                <Link href={`/products/${collection.title.toLowerCase().replace(/ /g, "-").replace("-collection", "")}`} className="relative inline-flex items-center gap-2 px-[18px] py-[13px] text-[0.75rem] tracking-[0.15em] text-[#FFFFFF]">
                                     <span className="z-10">View All</span>
 
                                     <svg
@@ -515,7 +516,7 @@ export default function Products() {
                                             strokeDasharray="12.270675659179688 4.6015"
                                         />
                                     </svg>
-                                </button>
+                                </Link>
                             </div>
 
                             {/* PRODUCT GRID with Category-style dashed borders */}
