@@ -76,7 +76,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
     };
   });
 
-  // EXACT TYPOGRAPHY FOR SIZE/CLOTHING GRID ITEMS ONLY
+  // EXACT TYPOGRAPHY FOR SIZE/CLOTHING GRID ITEMS
   const maisonNeueStyle = {
     fontFamily: '"Maison Neue", sans-serif',
     fontSize: '10.49px',
@@ -129,15 +129,18 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
           {/* ==================== LEFT SIDEBAR: FILTERS ==================== */}
           <aside className="w-full lg:w-[200px] shrink-0 flex flex-col gap-0">
             
-            {/* Product Count (Montserrat Alternates) */}
-            <div className="pb-4 mb-4 border-b border-[#DDDBDC]/20 h-[69px] flex items-center">
-               <span className={`${montAlt.className} text-[11px] tracking-widest text-white block`}>
+            {/* UPDATED: h-[39px] per your requirement for exact line alignment */}
+            <div className="h-[39px] flex items-center border-b border-[#DDDBDC]/20 mb-12">
+               <span 
+                 className="text-white block pt-1" 
+                 style={maisonNeueStyle}
+               >
                  249 Products
                </span>
             </div>
 
             {/* 1. Category Filter */}
-            <div className="py-0 border-b border-[#DDDBDC]/20">
+            <div className="py-4 border-b border-[#DDDBDC]/20">
               <div 
                 className="flex justify-between items-center mb-4 cursor-pointer"
                 onClick={() => toggleSection('category')}
@@ -150,9 +153,11 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                 <div className="flex flex-col gap-2">
                   {visibleCategories.map((item) => (
                     <label key={item} className="flex items-center gap-2 cursor-pointer group">
-                      <div className="w-[20px] h-[20px] rounded-[3.5px] border-[0.5px] border-[#212F52] bg-[#212F52] flex items-center justify-center shrink-0">
-                      </div>
-                      <span className={`${montAlt.className} text-[10.5px] text-white/80 group-hover:text-white transition-colors leading-tight`}>
+                      <div className="w-[20px] h-[20px] rounded-[3.5px] border-[0.5px] border-[#212F52] bg-[#212F52] flex items-center justify-center shrink-0"></div>
+                      <span 
+                        className="text-white/80 group-hover:text-white transition-colors leading-tight"
+                        style={maisonNeueStyle}
+                      >
                         {item}
                       </span>
                     </label>
@@ -186,6 +191,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                          <div className="absolute inset-0 rounded-full border border-white opacity-100" />
                          <div className="absolute inset-[3px] rounded-full" style={{ backgroundColor: c.hex }} />
                       </div>
+                      {/* Color names keep Montserrat Alternates */}
                       <span className={`${montAlt.className} text-[10px] text-white group-hover:text-[#D2B589] transition-colors`}>
                         {c.name}
                       </span>
@@ -208,14 +214,12 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
               {openSections.size && (
                 <div className="flex flex-col gap-3">
                   <div>
-                    {/* "Waist" Label keeps Montserrat Alternates */}
                     <p className={`${montAlt.className} text-[10.5px] text-[#D2B589] mb-3`}>Waist</p>
                     <div className="grid grid-cols-4 gap-2">
                       {SIZES_LIST.map((s) => (
                         <div 
                             key={s} 
                             className="w-[40px] h-[37px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors"
-                            // APPLY MAISON NEUE STYLE ONLY HERE
                             style={maisonNeueStyle}
                         >
                           {s}
@@ -243,7 +247,6 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                     <div 
                         key={size} 
                         className="w-[40px] h-[40px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors"
-                        // APPLY MAISON NEUE STYLE ONLY HERE
                         style={maisonNeueStyle}
                     >
                       {size}
