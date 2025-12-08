@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { Cormorant_Garamond, Montserrat } from "next/font/google";
+import Link from "next/link";
 
 // FONTS
 const mont = Montserrat({
@@ -29,7 +30,7 @@ export default function ProductGrid() {
           </div>
 
           {/* VIEW ALL BUTTON */}
-          <button className="relative w-[90px] h-[38px] sm:w-[100px] sm:h-[42px] lg:w-[111px] lg:h-[47px] flex items-center justify-center gap-1.5 sm:gap-2 text-white group">
+          <Link href={"/products"} className="relative w-[90px] h-[38px] sm:w-[100px] sm:h-[42px] lg:w-[111px] lg:h-[47px] flex items-center justify-center gap-1.5 sm:gap-2 text-white group cursor-pointer">
             {/* SVG Border Layer */}
             <svg
               className="absolute inset-0 h-full w-full pointer-events-none"
@@ -79,7 +80,7 @@ export default function ProductGrid() {
                 strokeLinejoin="round"
               />
             </svg>
-          </button>
+          </Link>
         </div>
 
         {/* ---------------- MOBILE LAYOUT (Below md) ---------------- */}

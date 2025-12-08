@@ -1,13 +1,13 @@
-import BlogSection from "@/components/BlogSection";
+import BlogSection from "@/components/Homepage/BlogSection";
 import FooterSection from "@/components/Footer";
-import HeroSection from "@/components/HeroSection";
+import HeroSection from "@/components/Homepage/HeroSection";
 import Navbar from "@/components/Navbar";
-import ProductCarousel from "@/components/ProductCarousel";
-import ProductGrid from "@/components/ProductGrid";
-import ProductSection from "@/components/Productsection";
-import SubscribeSection from "@/components/Subscribe";
-import Testimonials from "@/components/Testimonials";
-import VideoSection from "@/components/VideoSection";
+import ProductCarousel from "@/components/Homepage/ProductCarousel";
+import ProductGrid from "@/components/Homepage/ProductGrid";
+import ProductSection from "@/components/Homepage/Productsection";
+import SubscribeSection from "@/components/Homepage/Subscribe";
+import Testimonials from "@/components/Homepage/Testimonials";
+import VideoSection from "@/components/Homepage/VideoSection";
 
 export default function Home() {
   return (

@@ -31,7 +31,7 @@ const testimonials = [
     id: "02",
     name: "MARK LEE",
     role: "Marketing Manager — Vills Sud",
-    text: "Célestique's approach to sustainable design really resonated with us. They incorporated eco-friendly materials without sacrificing style or quality, creating a home that's both beautiful and environmentally conscious. We're thrilled with the results!",
+    text: "Best approach to sustainable design really resonated with us. They incorporated eco-friendly materials without sacrificing style or quality, creating a home that's both beautiful and environmentally conscious. We're thrilled with the results!",
   },
   {
     id: "03",

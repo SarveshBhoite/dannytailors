@@ -13,6 +13,7 @@ export default function Navbar() {
   // Observe sections on /products page to highlight active nav item
   useEffect(() => {
     if (pathname !== "/products") {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setActiveSection(null);
       return;
     }
@@ -77,15 +78,15 @@ export default function Navbar() {
         "
       >
         {/* LEFT LOGO */}
-        <div className="pointer-events-auto flex items-center gap-3">
+        <Link href={"/"} className="pointer-events-auto flex items-center gap-3">
           <Image
             src="/logo.svg"
             alt="Danny Tailors logo"
             width={70}
             height={70}
-            className="h-12 w-12 sm:h-14 sm:w-14 md:h-20 md:w-20 object-contain"
+            className="h-12 w-12 sm:h-14 sm:w-14 md:h-20 md:w-20 object-contain cursor-pointer"
           />
-        </div>
+        </Link>
 
         {/* CENTER BRAND NAME — hidden on mobile */}
         <div
@@ -166,7 +167,7 @@ export default function Navbar() {
           {/* MENU TOGGLE */}
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="flex h-9 w-9 sm:h-10 sm:w-10 flex-col items-center justify-center gap-1 sm:gap-1.5"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 flex-col items-center justify-center gap-1 sm:gap-1.5 cursor-pointer"
             aria-label="Open menu"
           >
             <span className="h-[2px] w-5 sm:h-[3px] sm:w-6 bg-[#8B744B] md:h-[2px] md:w-5" />

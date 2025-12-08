@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 const heroImages = ["/danny-1.jpg", "/girl.jpg", "/boy.png"];
@@ -106,29 +107,33 @@ export default function HeroSection() {
               </p>
 
               <div className="flex justify-center md:justify-start">
-                <button className="relative mt-4 md:mt-6 inline-flex items-center gap-2 px-6 py-2 md:p-8 md:py-2 text-[0.85rem] md:text-[0.9rem]">
-                  <span className="z-10">Learn More</span>
-                  <span className="text-[0.9rem] z-10">↗</span>
+               <Link
+  href="/products"
+  className="relative mt-4 md:mt-6 inline-flex items-center gap-2 px-6 py-2 md:p-8 md:py-2 text-[0.85rem] md:text-[0.9rem]"
+>
+  <span className="z-10">Learn More</span>
+  <span className="text-[0.9rem] z-10">↗</span>
 
-                  <svg
-                    className="absolute inset-0 h-full w-full rounded-[9px]"
-                    viewBox="0 0 200 45"
-                    preserveAspectRatio="none"
-                  >
-                    <rect
-                      x="1"
-                      y="1"
-                      width="198"
-                      height="43"
-                      rx="9"
-                      ry="9"
-                      fill="none"
-                      stroke="#D2B589"
-                      strokeWidth="0.75"
-                      strokeDasharray="12 4.5"
-                    />
-                  </svg>
-                </button>
+  <svg
+    className="absolute inset-0 h-full w-full rounded-[9px]"
+    viewBox="0 0 200 45"
+    preserveAspectRatio="none"
+  >
+    <rect
+      x="1"
+      y="1"
+      width="198"
+      height="43"
+      rx="9"
+      ry="9"
+      fill="none"
+      stroke="#D2B589"
+      strokeWidth="0.75"
+      strokeDasharray="12 4.5"
+    />
+  </svg>
+</Link>
+
               </div>
             </div>
 

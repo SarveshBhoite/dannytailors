@@ -1,6 +1,6 @@
 import Navbar from "@/components/Navbar";
 import FooterSection from "@/components/Footer";
-import ShopPage from "@/components/Products";
+import ShopPage from "@/components/Productpage/Products";
 
 export default function Shop() {
   return (
