@@ -281,7 +281,6 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                     className="object-cover object-center"
                     priority
                 />
-                <div className="absolute inset-0 bg-black/30" />
                 
                 <div className="absolute inset-0 flex flex-col justify-end items-center pb-12 md:pb-16 w-full px-4">
                     <h1 className={`${montserrat.className} text-[26px] md:text-[60px] lg:text-[80px] font-bold text-white uppercase tracking-[0.14em] leading-none drop-shadow-lg whitespace-nowrap text-center`}>
