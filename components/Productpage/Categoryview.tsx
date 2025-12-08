@@ -86,38 +86,104 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
     fontWeight: 400,
   };
 
+  // SVG Borders
+  const borderConfig = {
+    color: "#212F52",
+    width: 1.53,
+    dashArray: "12 8", 
+  };
+  const halfWidth = borderConfig.width / 2;
+
+  // Outer Border Component (Square corners)
+  const OuterDashedBorder = () => (
+    <div className="absolute inset-0 pointer-events-none z-20">
+      <svg className="w-full h-full">
+        <rect 
+          x={halfWidth} 
+          y={halfWidth} 
+          width={`calc(100% - ${borderConfig.width}px)`} 
+          height={`calc(100% - ${borderConfig.width}px)`} 
+          fill="none" 
+          stroke={borderConfig.color} 
+          strokeWidth={borderConfig.width} 
+          strokeDasharray={borderConfig.dashArray} 
+        />
+      </svg>
+    </div>
+  );
+
+  // Internal Right Border Component
+  const InternalDashedBorderRight = ({ className = "" }: { className?: string }) => (
+    <div className={`absolute top-0 right-0 h-full pointer-events-none z-10 ${className}`} style={{ width: borderConfig.width }}>
+      <svg className="w-full h-full overflow-visible">
+        <line 
+          x1={halfWidth} y1="0" x2={halfWidth} y2="100%" 
+          stroke={borderConfig.color} strokeWidth={borderConfig.width} strokeDasharray={borderConfig.dashArray} 
+        />
+      </svg>
+    </div>
+  );
+
+  // Internal Bottom Border Component
+  const InternalDashedBorderBottom = ({ className = "" }: { className?: string }) => (
+    <div className={`absolute bottom-0 left-0 w-full pointer-events-none z-10 ${className}`} style={{ height: borderConfig.width }}>
+      <svg className="w-full h-full overflow-visible">
+        <line 
+          x1="0" y1={halfWidth} x2="100%" y2={halfWidth} 
+          stroke={borderConfig.color} strokeWidth={borderConfig.width} strokeDasharray={borderConfig.dashArray} 
+        />
+      </svg>
+    </div>
+  );
+
   return (
-    <section className="min-h-screen bg-[#000A23] text-white pt-32 pb-20 select-none">
+    <section className="min-h-screen bg-[#000A23] text-white pt-26 pb-20 select-none">
       
       {/* MAIN CONTAINER */}
-      <div className="max-w-[1224px] mx-auto px-6 lg:px-0">
+      <div className="max-w-[1224px] mx-auto px-6 lg:px-0 relative">
 
         {/* HERO SECTION */}
-        <div className="relative w-full h-[300px] md:h-[450px] mb-12 rounded-[20px] overflow-hidden group">
-            <Image 
-                src="/shop-now/shop-bg.svg" 
-                alt="Bespoke Tailoring"
-                fill
-                className="object-cover object-center"
-                priority
-            />
-            <div className="absolute inset-0 bg-black/30" />
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <h1 className={`${montserrat.className} text-[40px] md:text-[60px] lg:text-[80px] font-bold text-white uppercase tracking-[0.14em] text-center leading-tight drop-shadow-lg max-w-[90%]`}>
-                    BESPOKE TAILORING
-                </h1>
+        <div className="relative w-full h-[300px] md:h-[450px] mb-16 z-20">
+            {/* Image Container */}
+            <div className="absolute inset-0 rounded-t-[20px] rounded-b-[10px] overflow-hidden">
+                <Image 
+                    src="/products/chefcoats/hero.svg" 
+                    alt="Bespoke Tailoring"
+                    fill
+                    className="object-cover object-center"
+                    priority
+                />
+                <div className="absolute inset-0 bg-black/30" />
+                
+                {/* UPDATED TEXT CONTAINER: 
+                   - justify-end: Pushes to bottom
+                   - items-center: Centers horizontally
+                   - w-full px-4: Ensures full width for centering with padding safety
+                */}
+                <div className="absolute inset-0 flex flex-col justify-end items-center pb-12 md:pb-16 w-full px-4">
+                    {/* UPDATED TEXT: 
+                       - whitespace-nowrap: Forces single line
+                       - text-center: Ensures text is centered
+                       - Removed max-w restriction
+                    */}
+                    <h1 className={`${montserrat.className} text-[26px] md:text-[60px] lg:text-[80px] font-bold text-white uppercase tracking-[0.14em] leading-none drop-shadow-lg whitespace-nowrap text-center`}>
+                        BESPOKE TAILORING
+                    </h1>
+                </div>
             </div>
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
-                <button className="relative flex items-center justify-center gap-2 w-[140px] h-[50px] bg-[#000A23] rounded-[8px] group/btn">
+
+            {/* Shop Now Button */}
+            <div className="absolute -bottom-[19px] md:-bottom-[25px] left-1/2 -translate-x-1/2 z-30">
+                <button className="relative flex items-center justify-center gap-2 w-[102px] h-[38px] md:w-[140px] md:h-[50px] bg-[#000A23] rounded-[8px] group/btn shadow-lg">
                     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 140 50" fill="none" preserveAspectRatio="none">
                         <rect x="0.5" y="0.5" width="139" height="49" rx="8" stroke="#8B744B" strokeWidth="1" strokeDasharray="6 3"/>
                     </svg>
-                    <div className="absolute top-0 left-0 w-[12px] h-[12px] border-t border-l border-[#AE9B84] rounded-tl-[8px]" />
-                    <div className="absolute top-0 right-0 w-[12px] h-[12px] border-t border-r border-[#AE9B84] rounded-tr-[8px]" />
-                    <div className="absolute bottom-0 right-0 w-[12px] h-[12px] border-b border-r border-[#AE9B84] rounded-br-[8px]" />
-                    <div className="absolute bottom-0 left-0 w-[12px] h-[12px] border-b border-l border-[#AE9B84] rounded-bl-[8px]" />
-                    <span className={`${montserrat.className} text-[14px] font-normal text-white`}>Shop Now</span>
-                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5">
+                    <div className="absolute top-0 left-0 w-[8px] h-[8px] md:w-[12px] md:h-[12px] border-t border-l border-[#AE9B84] rounded-tl-[8px]" />
+                    <div className="absolute top-0 right-0 w-[8px] h-[8px] md:w-[12px] md:h-[12px] border-t border-r border-[#AE9B84] rounded-tr-[8px]" />
+                    <div className="absolute bottom-0 right-0 w-[8px] h-[8px] md:w-[12px] md:h-[12px] border-b border-r border-[#AE9B84] rounded-br-[8px]" />
+                    <div className="absolute bottom-0 left-0 w-[8px] h-[8px] md:w-[12px] md:h-[12px] border-b border-l border-[#AE9B84] rounded-bl-[8px]" />
+                    <span className={`${montserrat.className} text-[10px] md:text-[14px] font-normal text-white`}>Shop Now</span>
+                    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" className="w-[10px] h-[10px] md:w-[12px] md:h-[12px] transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5">
                         <path d="M1 11L11 1M11 1H3.5M11 1V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                 </button>
@@ -125,14 +191,14 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
         </div>
 
         {/* CONTENT LAYOUT */}
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
+        <div className="flex flex-col lg:flex-row gap-8 items-start relative z-10">
 
           {/* LEFT SIDEBAR */}
           <aside className="w-full lg:w-[200px] shrink-0 flex flex-col gap-0">
-            {/* Count */}
             <div className="h-[39px] flex items-center border-b border-[#ffffff]/100 mb-2">
                <span className="text-white block pt-1" style={maisonNeueStyle}>249 Products</span>
             </div>
+            
             {/* Filters */}
             <div className="py-4 border-b border-[#ffffff]/100">
               <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('category')}>
@@ -151,6 +217,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                 </div>
               )}
             </div>
+
             <div className="py-4 border-b border-[#ffffff]/100">
               <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('color')}>
                 <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Color</span>
@@ -167,6 +234,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                 </div>
               )}
             </div>
+
             <div className="py-4 border-b border-[#ffffff]/100">
               <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('size')}>
                 <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Size</span>
@@ -185,6 +253,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                 </div>
               )}
             </div>
+
             <div className="py-4">
               <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('clothing')}>
                 <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Clothing</span>
@@ -214,12 +283,8 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
             {/* PRODUCT GRID - FULLY CUSTOM SVG GRID (SQUARE CORNERS) */}
             <div className="relative">
                 
-                {/* 1. OUTER BORDER (Absolute SVG overlay) - SQUARE corners (removed rx) */}
-                <div className="absolute inset-0 pointer-events-none z-20">
-                    <svg className="w-full h-full">
-                        <rect x="0.765" y="0.765" width="calc(100% - 1.53px)" height="calc(100% - 1.53px)" fill="none" stroke="#212F52" strokeWidth="1.53" strokeDasharray="12.27 4.6" />
-                    </svg>
-                </div>
+                {/* 1. OUTER BORDER (Absolute SVG overlay) - SQUARE corners */}
+                <OuterDashedBorder />
 
                 {/* 2. GRID CONTENT */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -235,21 +300,15 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                         `}
                         >
                             {/* --- INTERNAL RIGHT BORDER SVG --- */}
-                            {/* Hidden on the last column of the current breakpoint */}
-                            <div className="absolute right-0 top-0 h-full w-[1.53px] z-10 block md:[&:nth-child(2n)]:hidden lg:[&:nth-child(2n)]:block lg:[&:nth-child(3n)]:hidden">
-                                <svg className="h-full w-full" preserveAspectRatio="none"><line x1="0" y1="0" x2="0" y2="100%" stroke="#212F52" strokeWidth="1.53" strokeDasharray="12.27 4.6" /></svg>
-                            </div>
+                            <InternalDashedBorderRight className="block md:[&:nth-child(2n)]:hidden lg:[&:nth-child(2n)]:block lg:[&:nth-child(3n)]:hidden" />
 
                             {/* --- INTERNAL BOTTOM BORDER SVG --- */}
-                            {/* Hidden on the last row elements */}
-                            <div className={`
-                                absolute bottom-0 left-0 w-full h-[1.53px] z-10 block
-                                ${index >= products.length - (products.length % 2 || 2) ? "md:hidden" : ""}
-                                ${index >= products.length - (products.length % 3 || 3) ? "lg:hidden" : ""}
+                            <InternalDashedBorderBottom className={`
+                                block
                                 last:hidden
-                            `}>
-                                <svg className="h-full w-full" preserveAspectRatio="none"><line x1="0" y1="0" x2="100%" y2="0" stroke="#212F52" strokeWidth="1.53" strokeDasharray="12.27 4.6" /></svg>
-                            </div>
+                                ${index >= products.length - (products.length % 3 || 3) ? "lg:hidden" : ""}
+                                ${index >= products.length - (products.length % 2 || 2) ? "md:hidden" : ""}
+                            `} />
 
 
                             {/* IMAGE */}
