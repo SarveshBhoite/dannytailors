@@ -189,7 +189,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                   {COLORS_LIST.map((c) => (
                     <div key={c.name} className="flex flex-col items-center gap-2 cursor-pointer group">
                       <div className="relative w-[28px] h-[28px]">
-                         <div className="absolute inset-0 rounded-full border border-white opacity-100" />
+                         <div className="absolute inset-0" />
                          <div className="absolute inset-[3px] rounded-full" style={{ backgroundColor: c.hex }} />
                       </div>
                       <span className={`${montAlt.className} text-[10px] text-white group-hover:text-[#D2B589] transition-colors`}>
