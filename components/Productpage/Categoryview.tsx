@@ -129,8 +129,9 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
           {/* ==================== LEFT SIDEBAR: FILTERS ==================== */}
           <aside className="w-full lg:w-[200px] shrink-0 flex flex-col gap-0">
             
-            {/* UPDATED: h-[39px] per your requirement for exact line alignment */}
-            <div className="h-[39px] flex items-center border-b border-[#DDDBDC]/20 mb-12">
+            {/* Product Count Header */}
+            {/* Height set to 39px to align baseline with Breadcrumb Header */}
+            <div className="h-[34px] flex items-center border-b border-[#DDDBDC]/20 mb-2">
                <span 
                  className="text-white block pt-1" 
                  style={maisonNeueStyle}
@@ -191,7 +192,6 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                          <div className="absolute inset-0 rounded-full border border-white opacity-100" />
                          <div className="absolute inset-[3px] rounded-full" style={{ backgroundColor: c.hex }} />
                       </div>
-                      {/* Color names keep Montserrat Alternates */}
                       <span className={`${montAlt.className} text-[10px] text-white group-hover:text-[#D2B589] transition-colors`}>
                         {c.name}
                       </span>
@@ -261,8 +261,11 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
           {/* ==================== RIGHT GRID: PRODUCTS ==================== */}
           <main className="flex-1 w-full">
             
-            {/* Breadcrumb Header */}
-            <div className="mb-6 flex flex-col justify-center gap-1 border-b border-[#DDDBDC]/20 pb-4 h-[69px]">
+            {/* UPDATED: Removed border-b to seamlessly flow into grid if desired, or keep it. 
+               User asked to remove line breaker below title.
+               Removed 'border-b border-[#DDDBDC]/20' class below.
+            */}
+            <div className="mb-6 flex flex-col justify-center gap-1 pb-0 h-[39px]">
                  <p className={`${montserrat.className} text-[10.5px] text-[#737373] uppercase tracking-wider`}>
                     Home / {categoryName}
                  </p>
