@@ -367,8 +367,14 @@ function FAQSection() {
                     </div>
 
                     {/* FAQ grid with same border system as Category */}
-                    <div className="relative mt-8 hidden md:block">
-                        <OuterDashedBorder />
+                    {/* MODIFIED: Added negative margins (-mx-6 md:-mx-10) to pull grid to the edges 
+                        and removed OuterDashedBorder to avoid double border effect */}
+                    <div className="relative mt-8 hidden md:block -mx-6 md:-mx-10">
+                        {/* Top Separator Line for the Grid */}
+                        <div className="absolute top-0 left-0 w-full">
+                            <InternalDashedBorderBottom />
+                        </div>
+                        
                         <div className="grid grid-cols-2">
                             {filteredFaqs.map((faq, index) => {
                                 const rowIndex = Math.floor(index / cols);
@@ -378,7 +384,8 @@ function FAQSection() {
                                 return (
                                     <div
                                         key={faq.id}
-                                        className="relative overflow-hidden px-6 py-12"
+                                        // MODIFIED: Increased padding to md:px-10 so text aligns with Header
+                                        className="relative overflow-hidden px-6 md:px-10 py-12"
                                     >
                                         {/* vertical line between columns (only left cell) */}
                                         {colIndex === 0 && (
