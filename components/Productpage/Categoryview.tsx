@@ -86,15 +86,15 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
   };
 
   return (
-    <section className="min-h-screen bg-[#000A23] text-white pt-32 pb-20 select-none">
+    <section className="min-h-screen bg-[#000A23] text-white pt-26 pb-20 select-none">
       
       {/* MAIN CONTAINER */}
       <div className="max-w-[1224px] mx-auto px-6 lg:px-0">
 
         {/* HERO SECTION */}
-        <div className="relative w-full h-[300px] md:h-[450px] mb-12 rounded-[20px] overflow-hidden group">
+        <div className="relative w-full h-[300px] md:h-[450px] mb-12 rounded-[15px] overflow-hidden group">
             <Image 
-                src="/shop-now/shop-bg.svg" 
+                src="/products/chefcoats/hero.svg" 
                 alt="Bespoke Tailoring"
                 fill
                 className="object-cover object-center"
@@ -130,7 +130,6 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
           <aside className="w-full lg:w-[200px] shrink-0 flex flex-col gap-0">
             
             {/* Product Count Header */}
-            {/* Height set to 39px to align baseline with Breadcrumb Header */}
             <div className="h-[34px] flex items-center border-b border-[#ffffff]/100 mb-2">
                <span 
                  className="text-white block pt-1" 
@@ -188,10 +187,11 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                 <div className="grid grid-cols-3 gap-y-4 gap-x-2">
                   {COLORS_LIST.map((c) => (
                     <div key={c.name} className="flex flex-col items-center gap-2 cursor-pointer group">
-                      <div className="relative w-[28px] h-[28px]">
-                         <div className="absolute inset-0" />
-                         <div className="absolute inset-[3px] rounded-full" style={{ backgroundColor: c.hex }} />
-                      </div>
+                      {/* UPDATED: Simple circle without the border/gap structure */}
+                      <div 
+                        className="w-[28px] h-[28px] rounded-full" 
+                        style={{ backgroundColor: c.hex }} 
+                      />
                       <span className={`${montAlt.className} text-[10px] text-white group-hover:text-[#D2B589] transition-colors`}>
                         {c.name}
                       </span>
@@ -261,10 +261,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
           {/* ==================== RIGHT GRID: PRODUCTS ==================== */}
           <main className="flex-1 w-full">
             
-            {/* UPDATED: Removed border-b to seamlessly flow into grid if desired, or keep it. 
-               User asked to remove line breaker below title.
-               Removed 'border-b border-[#DDDBDC]/20' class below.
-            */}
+            {/* Breadcrumb Header */}
             <div className="mb-6 flex flex-col justify-center gap-1 pb-0 h-[39px]">
                  <p className={`${montserrat.className} text-[10.5px] text-[#737373] uppercase tracking-wider`}>
                     Home / {categoryName}
