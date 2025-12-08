@@ -49,6 +49,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
   });
 
   const [showAllCategories, setShowAllCategories] = useState(false);
+  const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
 
   const toggleSection = (section: keyof typeof openSections) => {
     setOpenSections((prev) => ({ ...prev, [section]: !prev[section] }));
@@ -136,9 +137,136 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
     </div>
   );
 
+  // Filter Sidebar Content Component (reusable for both mobile and desktop) - WITHOUT product count
+  const FilterContent = () => (
+    <>
+      {/* Category Filter */}
+      <div className="py-4 border-b border-[#ffffff]/100">
+        <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('category')}>
+          <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Category</span>
+          <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.category ? 'rotate-0' : 'rotate-180'}`}>▲</span>
+        </div>
+        {openSections.category && (
+          <div className="flex flex-col gap-2">
+            {visibleCategories.map((item) => (
+              <label key={item} className="flex items-center gap-2 cursor-pointer group">
+                <div className="w-[20px] h-[20px] rounded-[3.5px] border-[0.5px] border-[#212F52] bg-[#212F52] flex items-center justify-center shrink-0"></div>
+                <span className="text-white/80 group-hover:text-white transition-colors leading-tight" style={maisonNeueStyle}>{item}</span>
+              </label>
+            ))}
+            <button onClick={() => setShowAllCategories(!showAllCategories)} className={`${montserrat.className} text-[10.5px] text-[#D2B589] hover:underline text-left mt-1`}>{showAllCategories ? "View Less -" : "View More +"}</button>
+          </div>
+        )}
+      </div>
+
+      {/* Color Filter */}
+      <div className="py-4 border-b border-[#ffffff]/100">
+        <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('color')}>
+          <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Color</span>
+          <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.color ? 'rotate-0' : 'rotate-180'}`}>▲</span>
+        </div>
+        {openSections.color && (
+          <div className="grid grid-cols-3 gap-y-4 gap-x-2">
+            {COLORS_LIST.map((c) => (
+              <div key={c.name} className="flex flex-col items-center gap-2 cursor-pointer group">
+                <div className="w-[28px] h-[28px] rounded-full" style={{ backgroundColor: c.hex }} />
+                <span className={`${montAlt.className} text-[10px] text-white group-hover:text-[#D2B589] transition-colors`}>{c.name}</span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Size Filter */}
+      <div className="py-4 border-b border-[#ffffff]/100">
+        <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('size')}>
+          <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Size</span>
+          <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.size ? 'rotate-0' : 'rotate-180'}`}>▲</span>
+        </div>
+        {openSections.size && (
+          <div className="flex flex-col gap-3">
+            <div>
+              <p className={`${montAlt.className} text-[10.5px] text-[#D2B589] mb-3`}>Waist</p>
+              <div className="grid grid-cols-4 gap-2">
+                {SIZES_LIST.map((s) => (
+                  <div key={s} className="w-[40px] h-[37px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors" style={maisonNeueStyle}>{s}</div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Clothing Filter */}
+      <div className="py-4">
+        <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('clothing')}>
+          <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Clothing</span>
+          <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.clothing ? 'rotate-0' : 'rotate-180'}`}>▲</span>
+        </div>
+        {openSections.clothing && (
+          <div className="grid grid-cols-4 gap-2">
+            {CLOTHING_SIZE_LIST.map((size) => (
+              <div key={size} className="w-[40px] h-[40px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors" style={maisonNeueStyle}>{size}</div>
+            ))}
+          </div>
+        )}
+      </div>
+    </>
+  );
+
   return (
     <section className="min-h-screen bg-[#000A23] text-white pt-26 pb-20 select-none">
       
+      {/* MOBILE FILTER OVERLAY */}
+      {isMobileFilterOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={() => setIsMobileFilterOpen(false)}
+        />
+      )}
+
+      {/* MOBILE FILTER SIDEBAR */}
+      <div className={`
+        fixed top-0 left-0 h-full w-[280px] bg-[#000A23] z-50 lg:hidden
+        transform transition-transform duration-300 ease-in-out
+        ${isMobileFilterOpen ? 'translate-x-0' : '-translate-x-full'}
+        border-r border-[#212F52]
+        flex flex-col
+      `}>
+        {/* Mobile Sidebar Header */}
+        <div className="shrink-0 bg-[#000A23] z-10 px-5 py-4 border-b border-[#212F52] flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D2B589" strokeWidth="2">
+              <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            <span className={`${montserrat.className} text-[14px] font-semibold text-white uppercase tracking-wider`}>Filters</span>
+          </div>
+          <button 
+            onClick={() => setIsMobileFilterOpen(false)}
+            className="w-[32px] h-[32px] rounded-full bg-[#212F52] flex items-center justify-center hover:bg-[#D2B589] transition-colors group"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-white group-hover:text-[#000A23]">
+              <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Sidebar Content - Scrollable */}
+        <div className="flex-1 overflow-y-auto px-5">
+          <FilterContent />
+        </div>
+
+        {/* Mobile Sidebar Footer - Apply Button */}
+        <div className="shrink-0 bg-[#000A23] border-t border-[#212F52] p-4">
+          <button 
+            onClick={() => setIsMobileFilterOpen(false)}
+            className={`${montserrat.className} w-full py-3 bg-[#D2B589] text-[#000A23] rounded-lg font-semibold text-[14px] hover:bg-[#c4a678] transition-colors`}
+          >
+            Apply Filters
+          </button>
+        </div>
+      </div>
+
       {/* MAIN CONTAINER */}
       <div className="max-w-[1224px] mx-auto px-6 lg:px-0 relative">
 
@@ -155,17 +283,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                 />
                 <div className="absolute inset-0 bg-black/30" />
                 
-                {/* UPDATED TEXT CONTAINER: 
-                   - justify-end: Pushes to bottom
-                   - items-center: Centers horizontally
-                   - w-full px-4: Ensures full width for centering with padding safety
-                */}
                 <div className="absolute inset-0 flex flex-col justify-end items-center pb-12 md:pb-16 w-full px-4">
-                    {/* UPDATED TEXT: 
-                       - whitespace-nowrap: Forces single line
-                       - text-center: Ensures text is centered
-                       - Removed max-w restriction
-                    */}
                     <h1 className={`${montserrat.className} text-[26px] md:text-[60px] lg:text-[80px] font-bold text-white uppercase tracking-[0.14em] leading-none drop-shadow-lg whitespace-nowrap text-center`}>
                         BESPOKE TAILORING
                     </h1>
@@ -193,91 +311,41 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
         {/* CONTENT LAYOUT */}
         <div className="flex flex-col lg:flex-row gap-8 items-start relative z-10">
 
-          {/* LEFT SIDEBAR */}
-          <aside className="w-full lg:w-[200px] shrink-0 flex flex-col gap-0">
+          {/* LEFT SIDEBAR - DESKTOP ONLY */}
+          <aside className="hidden lg:flex w-full lg:w-[200px] shrink-0 flex-col gap-0">
+            {/* Product Count - Desktop Only */}
             <div className="h-[39px] flex items-center border-b border-[#ffffff]/100 mb-2">
-               <span className="text-white block pt-1" style={maisonNeueStyle}>249 Products</span>
+              <span className="text-white block pt-1" style={maisonNeueStyle}>249 Products</span>
             </div>
-            
-            {/* Filters */}
-            <div className="py-4 border-b border-[#ffffff]/100">
-              <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('category')}>
-                <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Category</span>
-                <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.category ? 'rotate-0' : 'rotate-180'}`}>▲</span>
-              </div>
-              {openSections.category && (
-                <div className="flex flex-col gap-2">
-                  {visibleCategories.map((item) => (
-                    <label key={item} className="flex items-center gap-2 cursor-pointer group">
-                      <div className="w-[20px] h-[20px] rounded-[3.5px] border-[0.5px] border-[#212F52] bg-[#212F52] flex items-center justify-center shrink-0"></div>
-                      <span className="text-white/80 group-hover:text-white transition-colors leading-tight" style={maisonNeueStyle}>{item}</span>
-                    </label>
-                  ))}
-                  <button onClick={() => setShowAllCategories(!showAllCategories)} className={`${montserrat.className} text-[10.5px] text-[#D2B589] hover:underline text-left mt-1`}>{showAllCategories ? "View Less -" : "View More +"}</button>
-                </div>
-              )}
-            </div>
-
-            <div className="py-4 border-b border-[#ffffff]/100">
-              <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('color')}>
-                <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Color</span>
-                <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.color ? 'rotate-0' : 'rotate-180'}`}>▲</span>
-              </div>
-              {openSections.color && (
-                <div className="grid grid-cols-3 gap-y-4 gap-x-2">
-                  {COLORS_LIST.map((c) => (
-                    <div key={c.name} className="flex flex-col items-center gap-2 cursor-pointer group">
-                      <div className="w-[28px] h-[28px] rounded-full" style={{ backgroundColor: c.hex }} />
-                      <span className={`${montAlt.className} text-[10px] text-white group-hover:text-[#D2B589] transition-colors`}>{c.name}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="py-4 border-b border-[#ffffff]/100">
-              <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('size')}>
-                <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Size</span>
-                <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.size ? 'rotate-0' : 'rotate-180'}`}>▲</span>
-              </div>
-              {openSections.size && (
-                <div className="flex flex-col gap-3">
-                  <div>
-                    <p className={`${montAlt.className} text-[10.5px] text-[#D2B589] mb-3`}>Waist</p>
-                    <div className="grid grid-cols-4 gap-2">
-                      {SIZES_LIST.map((s) => (
-                        <div key={s} className="w-[40px] h-[37px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors" style={maisonNeueStyle}>{s}</div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="py-4">
-              <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={() => toggleSection('clothing')}>
-                <span className={`${montserrat.className} text-[12px] font-semibold tracking-wider text-white uppercase`}>Clothing</span>
-                <span className={`text-[10px] text-white transition-transform duration-300 ${openSections.clothing ? 'rotate-0' : 'rotate-180'}`}>▲</span>
-              </div>
-              {openSections.clothing && (
-                <div className="grid grid-cols-4 gap-2">
-                  {CLOTHING_SIZE_LIST.map((size) => (
-                    <div key={size} className="w-[40px] h-[40px] bg-[#212F52] flex items-center justify-center text-[#D2B589] cursor-pointer hover:bg-[#D2B589] hover:text-[#212F52] transition-colors" style={maisonNeueStyle}>{size}</div>
-                  ))}
-                </div>
-              )}
-            </div>
+            <FilterContent />
           </aside>
 
           {/* RIGHT GRID */}
           <main className="flex-1 w-full">
-            <div className="mb-6 flex flex-col justify-center gap-1 pb-0 h-[39px]">
-                 <p className={`${montserrat.className} text-[10.5px] text-[#737373] uppercase tracking-wider`}>
-                    Home / {categoryName}
-                 </p>
-                 <h2 className={`${montserrat.className} text-[28px] text-white font-normal capitalize leading-none pt-1`}>
-                    {categoryName} - New Arrivals
-                 </h2>
+            {/* Mobile: Product Count & Filter Button Row */}
+            <div className="lg:hidden flex items-center justify-between border-b border-[#ffffff]/100 h-[39px] mb-4">
+              <span className="text-white" style={maisonNeueStyle}>249 Products</span>
+              <button 
+                onClick={() => setIsMobileFilterOpen(true)}
+                className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+              >
+                <span className={`${montserrat.className} text-[11px] font-medium text-[#D2B589] uppercase tracking-wider`}>
+                  Filters
+                </span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D2B589" strokeWidth="2">
+                  <path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </button>
+            </div>
+
+            {/* Breadcrumb & Title */}
+            <div className="mb-6 flex flex-col justify-center gap-1 pb-0 h-auto lg:h-[39px]">
+              <p className={`${montserrat.className} text-[10.5px] text-[#737373] uppercase tracking-wider`}>
+                Home / {categoryName}
+              </p>
+              <h2 className={`${montserrat.className} text-[24px] lg:text-[28px] text-white font-normal capitalize leading-none pt-1`}>
+                {categoryName} - New Arrivals
+              </h2>
             </div>
 
             {/* PRODUCT GRID - FULLY CUSTOM SVG GRID (SQUARE CORNERS) */}
