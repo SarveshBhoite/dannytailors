@@ -131,7 +131,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
             
             {/* Product Count Header */}
             {/* Height set to 39px to align baseline with Breadcrumb Header */}
-            <div className="h-[34px] flex items-center border-b border-[#DDDBDC]/20 mb-2">
+            <div className="h-[34px] flex items-center border-b border-[#ffffff]/100 mb-2">
                <span 
                  className="text-white block pt-1" 
                  style={maisonNeueStyle}
@@ -141,7 +141,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
             </div>
 
             {/* 1. Category Filter */}
-            <div className="py-4 border-b border-[#DDDBDC]/20">
+            <div className="py-4 border-b border-[#ffffff]/100">
               <div 
                 className="flex justify-between items-center mb-4 cursor-pointer"
                 onClick={() => toggleSection('category')}
@@ -175,7 +175,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
             </div>
 
             {/* 2. Color Filter */}
-            <div className="py-4 border-b border-[#DDDBDC]/20">
+            <div className="py-4 border-b border-[#ffffff]/100">
               <div 
                 className="flex justify-between items-center mb-4 cursor-pointer"
                 onClick={() => toggleSection('color')}
@@ -202,7 +202,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
             </div>
 
             {/* 3. Size Filter */}
-            <div className="py-4 border-b border-[#DDDBDC]/20">
+            <div className="py-4 border-b border-[#ffffff]/100">
               <div 
                 className="flex justify-between items-center mb-4 cursor-pointer"
                 onClick={() => toggleSection('size')}
@@ -232,7 +232,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
             </div>
 
             {/* 4. Clothing Filter */}
-            <div className="py-4 border-b border-[#DDDBDC]/20">
+            <div className="py-4">
               <div 
                 className="flex justify-between items-center mb-4 cursor-pointer"
                 onClick={() => toggleSection('clothing')}
