@@ -367,8 +367,6 @@ function FAQSection() {
                     </div>
 
                     {/* FAQ grid with same border system as Category */}
-                    {/* MODIFIED: Added negative margins (-mx-6 md:-mx-10) to pull grid to the edges 
-                        and removed OuterDashedBorder to avoid double border effect */}
                     <div className="relative mt-8 hidden md:block -mx-6 md:-mx-10">
                         {/* Top Separator Line for the Grid */}
                         <div className="absolute top-0 left-0 w-full">
@@ -384,7 +382,6 @@ function FAQSection() {
                                 return (
                                     <div
                                         key={faq.id}
-                                        // MODIFIED: Increased padding to md:px-10 so text aligns with Header
                                         className="relative overflow-hidden px-6 md:px-10 py-12"
                                     >
                                         {/* vertical line between columns (only left cell) */}
@@ -406,7 +403,7 @@ function FAQSection() {
                         </div>
                     </div>
 
-                    {/* Mobile: simple stacked cards, no complex grid lines */}
+                    {/* Mobile: simple stacked cards */}
                     <div className="mt-8 grid gap-6 md:hidden">
                         {filteredFaqs.map((faq) => (
                             <div
@@ -479,9 +476,13 @@ export default function Products() {
                     {/* COLLECTIONS */}
                     {collections.map((collection, index) => (
                         <section key={collection.id} className={index === 0 ? "mt-0" : "mt-0"}>
-                            {/* TITLE + VIEW ALL ROW (unchanged) */}
-                            <div className="flex flex-col gap-4 px-6 py-0 md:flex-row md:items-center md:justify-between md:px-10">
-                                <h2 className="text-[1rem] font-normal uppercase tracking-[0.1em] text-[#FFFFFF]">
+                            {/* RESPONSIVE CHANGE: 
+                                Changed flex-col to flex-row for mobile to align Title and View All button side-by-side. 
+                                Added items-center and justify-between. 
+                                Reduced left/right padding to px-4 for mobile.
+                            */}
+                            <div className="flex flex-row items-center justify-between gap-2 px-4 py-0 md:px-10">
+                                <h2 className="text-[0.9rem] sm:text-[1rem] font-normal uppercase tracking-[0.1em] text-[#FFFFFF]">
                                     {collection.title}
                                 </h2>
 
@@ -537,8 +538,12 @@ export default function Products() {
                                                 key={`${collection.id}-${product.id}`}
                                                 className="relative flex flex-col bg-[#000A23] p-[23px] gap-[23px]"
                                             >
-                                                {/* internal grid lines: same pattern as Category section */}
-                                                <InternalDashedBorderRight className="block md:[&:nth-child(2n)]:hidden lg:[&:nth-child(2n)]:block lg:[&:nth-child(3n)]:hidden" />
+                                                {/* RESPONSIVE BORDER FIX:
+                                                   InternalDashedBorderRight is now 'hidden' on mobile (default) and 'md:block'.
+                                                   This prevents double right borders in the single-column mobile view.
+                                                */}
+                                                <InternalDashedBorderRight className="hidden md:block md:[&:nth-child(2n)]:hidden lg:[&:nth-child(2n)]:block lg:[&:nth-child(3n)]:hidden" />
+                                                
                                                 <InternalDashedBorderBottom
                                                     className={`block last:hidden ${index >=
                                                         collection.products.length -
