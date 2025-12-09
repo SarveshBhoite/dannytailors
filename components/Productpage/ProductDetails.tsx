@@ -21,34 +21,103 @@ const robotoMono = Roboto_Mono({
 });
 
 // ---------- BORDER SYSTEM ----------
-// Exact dashed border config to match your Figma
 const borderConfig = {
   color: "#212F52",
-  width: 1.5,
+  width: 1.53,
   dashArray: "12 8", 
 };
+const halfWidth = borderConfig.width / 2;
 
-// Reusable SVG Border Components for precise control
+// 1. Outer Border Wrapper
+const OuterDashedBorder = () => (
+  <div className="absolute inset-0 pointer-events-none z-20">
+    <svg className="w-full h-full">
+      <rect 
+        x={halfWidth} 
+        y={halfWidth} 
+        width={`calc(100% - ${borderConfig.width}px)`} 
+        height={`calc(100% - ${borderConfig.width}px)`} 
+        fill="none" 
+        stroke={borderConfig.color} 
+        strokeWidth={borderConfig.width} 
+        strokeDasharray={borderConfig.dashArray} 
+        rx="16" ry="16" 
+      />
+    </svg>
+  </div>
+);
+
+// 2. Horizontal Divider
 const HorizontalBorder = ({ className = "" }: { className?: string }) => (
   <div className={`pointer-events-none absolute left-0 w-full z-10 ${className}`} style={{ height: borderConfig.width }}>
     <svg className="h-full w-full overflow-visible">
       <line 
-        x1="0" y1="0" x2="100%" y2="0" 
+        x1="0" y1={halfWidth} x2="100%" y2={halfWidth} 
         stroke={borderConfig.color} strokeWidth={borderConfig.width} strokeDasharray={borderConfig.dashArray} 
       />
     </svg>
   </div>
 );
 
+// 3. Vertical Divider
 const VerticalBorder = ({ className = "" }: { className?: string }) => (
   <div className={`pointer-events-none absolute top-0 h-full z-10 ${className}`} style={{ width: borderConfig.width }}>
     <svg className="h-full w-full overflow-visible">
       <line 
-        x1="0" y1="0" x2="0" y2="100%" 
+        x1={halfWidth} y1="0" x2={halfWidth} y2="100%" 
         stroke={borderConfig.color} strokeWidth={borderConfig.width} strokeDasharray={borderConfig.dashArray} 
       />
     </svg>
   </div>
+);
+
+// ---------- SUB-COMPONENT: QUANTITY STEPPER ----------
+const QuantityStepper = ({ value, onMinus, onPlus }: { value: number, onMinus: () => void, onPlus: () => void }) => {
+    return (
+        <div className="relative flex items-center justify-between w-[72px] h-[33px] bg-transparent rounded-[11px] group select-none">
+            {/* SVG Dashed Border - Using "6 3" dash array to keep dashes long */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 72 33" fill="none" preserveAspectRatio="none">
+                <rect x="0.5" y="0.5" width="71" height="32" rx="11" stroke="#8B744B" strokeWidth="0.76" strokeDasharray="6 3"/>
+            </svg>
+
+            {/* Corner Accents */}
+            <div className="absolute top-0 left-0 w-[8px] h-[8px] border-t border-l border-[#D2B589] rounded-tl-[11px]" />
+            <div className="absolute top-0 right-0 w-[8px] h-[8px] border-t border-r border-[#D2B589] rounded-tr-[11px]" />
+            <div className="absolute bottom-0 right-0 w-[8px] h-[8px] border-b border-r border-[#D2B589] rounded-br-[11px]" />
+            <div className="absolute bottom-0 left-0 w-[8px] h-[8px] border-b border-l border-[#D2B589] rounded-bl-[11px]" />
+
+            {/* Minus */}
+            <button 
+                onClick={onMinus}
+                className="flex items-center justify-center w-[24px] h-full text-[#D2B589] hover:text-white transition-colors text-[16px] -mt-0.5"
+            >
+                −
+            </button>
+
+            {/* Value */}
+            <span className={`${robotoMono.className} text-[12px] text-white pt-0.5`}>
+                {value > 0 ? value : "0"}
+            </span>
+
+            {/* Plus */}
+            <button 
+                onClick={onPlus}
+                className="flex items-center justify-center w-[24px] h-full text-[#D2B589] hover:text-white transition-colors text-[16px] -mt-0.5"
+            >
+                +
+            </button>
+        </div>
+    );
+};
+
+// ---------- SUB-COMPONENT: STAR ICON ----------
+const StarIcon = ({ className = "" }: { className?: string }) => (
+    <svg 
+        width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+        className={className}
+    >
+        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#FFCE22"/>
+    </svg>
 );
 
 // ---------- MOCK DATA ----------
@@ -60,24 +129,36 @@ const colors = [
 ];
 
 export default function ProductDetails() {
+  // State for Single Selection
   const [selectedSize, setSelectedSize] = useState("S");
   const [selectedColor, setSelectedColor] = useState("Blue");
-  const [toggleMode, setToggleMode] = useState("Select Sizes"); // "Select Sizes" or "Order Multiple"
+  
+  // State for Toggle Mode
+  const [toggleMode, setToggleMode] = useState<"Select Sizes" | "Order Multiple">("Select Sizes");
+
+  // State for Multiple Orders { "S": 2, "L": 1 }
+  const [sizeQuantities, setSizeQuantities] = useState<Record<string, number>>({});
+
+  // Helper to update quantity
+  const updateQuantity = (size: string, delta: number) => {
+    setSizeQuantities(prev => {
+        const current = prev[size] || 0;
+        const next = Math.max(0, current + delta);
+        return { ...prev, [size]: next };
+    });
+  };
 
   return (
     <div className={`relative w-full max-w-[1280px] mx-auto ${montserrat.className}`}>
       
-      {/* MAIN CONTAINER BORDER */}
-      <div className="relative border-[1.5px] border-dashed border-[#212F52] rounded-[16px] overflow-hidden">
+      {/* MAIN CONTAINER */}
+      <div className="relative rounded-[16px] overflow-hidden bg-[#000a23]">
+        <OuterDashedBorder />
         
-        {/* ---------------------------------------------------------
-            ROW 1: HEADER SECTION
-        --------------------------------------------------------- */}
+        {/* ROW 1: HEADER */}
         <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between p-6 md:p-[60px] gap-8 bg-[#000a23]">
-            {/* Header Bottom Border */}
             <HorizontalBorder className="bottom-0" />
 
-            {/* Left: Title & Subtitle */}
             <div className="flex flex-col gap-[10px] w-full max-w-[821px]">
                 <h1 className="text-[28px] md:text-[38px] font-medium text-white uppercase leading-tight">
                     Elegant Evening Gown
@@ -86,47 +167,50 @@ export default function ProductDetails() {
                     <span className={`${montserratalter.className} text-[#676665] text-[16px] md:text-[18px]`}>
                         Fitted bodice, flowing skirt
                     </span>
-                    {/* In Stock Badge (Exact Figma Colors) */}
                     <div className="flex items-center justify-center px-4 py-1.5 bg-[#152011] rounded-full">
                         <span className={`${montserratalter.className} text-[#8AF265] text-[14px]`}>In stock</span>
                     </div>
                 </div>
             </div>
 
-            {/* Right: Buttons */}
             <div className="flex items-center gap-5">
-                {/* Add to Cart (Dark with Dashed Gold Border) */}
-                <button className="flex items-center justify-center gap-2 px-[18px] py-[13px] bg-[#000A23] border-[0.76px] border-dashed border-[#8B744B] rounded-[9px] hover:bg-[#0a1533] transition">
-                    <span className="text-[14px] text-white whitespace-nowrap">Add to Cart</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                {/* Add to Cart */}
+                <button className="relative flex items-center justify-center gap-3 w-[150px] h-[50px] bg-[#000A23] rounded-[9px] group/btn">
+                    <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 150 50" fill="none" preserveAspectRatio="none">
+                        <rect x="0.5" y="0.5" width="149" height="49" rx="9" stroke="#8B744B" strokeWidth="0.76" strokeDasharray="6 3"/>
+                    </svg>
+                    <div className="absolute top-0 left-0 w-[12px] h-[12px] border-t border-l border-[#D2B589] rounded-tl-[9px]" />
+                    <div className="absolute top-0 right-0 w-[12px] h-[12px] border-t border-r border-[#D2B589] rounded-tr-[9px]" />
+                    <div className="absolute bottom-0 right-0 w-[12px] h-[12px] border-b border-r border-[#D2B589] rounded-br-[9px]" />
+                    <div className="absolute bottom-0 left-0 w-[12px] h-[12px] border-b border-l border-[#D2B589] rounded-bl-[9px]" />
+                    
+                    <span className={`${montserrat.className} text-[14px] text-white font-normal`}>Add to Cart</span>
+                    <div className="relative w-5 h-5">
+                        <Image src="/cart.svg" alt="Cart" fill className="object-contain" />
+                    </div>
                 </button>
 
-                {/* Shop Now (Solid Gold) */}
-                <button className="flex items-center justify-center gap-2 px-[20px] py-[14px] bg-[#D2B589] rounded-[8px] hover:bg-[#c4a676] transition">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="black"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                {/* Shop Now */}
+                <button className="flex items-center justify-center gap-3 px-[20px] py-[14px] bg-[#D2B589] rounded-[8px] hover:bg-[#c4a676] transition h-[50px]">
+                     <div className="relative w-5 h-5">
+                        <Image src="/shop.svg" alt="Shop" fill className="object-contain" />
+                    </div>
                     <span className="text-[14px] text-[#0F0F0F] font-normal whitespace-nowrap">Shop Now</span>
                 </button>
             </div>
         </div>
 
-        {/* ---------------------------------------------------------
-            ROW 2: IMAGES
-        --------------------------------------------------------- */}
+        {/* ROW 2: IMAGES */}
         <div className="relative flex flex-col lg:flex-row h-auto lg:h-[511px]">
-             {/* Divider Line Bottom */}
              <HorizontalBorder className="bottom-0" />
 
-            {/* Main Image (Left) */}
             <div className="relative w-full lg:w-[742px] h-[400px] lg:h-full p-5 lg:p-[30px_20px]">
-                {/* Vertical Separator */}
                 <VerticalBorder className="right-0 hidden lg:block" />
-                
                 <div className="relative w-full h-full bg-[#D9D9D9] overflow-hidden">
                     <Image src="/products/detail1.svg" alt="Main View" fill className="object-cover object-top" />
                 </div>
             </div>
 
-            {/* Small Images (Right) */}
             <div className="flex flex-col w-full lg:w-[538px] h-full">
                 <div className="relative flex-1 h-[250px] lg:h-[50%] p-5 lg:p-[30px_0px_10px_0px] lg:pl-[20px]">
                     <div className="relative w-full h-full bg-[#D9D9D9] overflow-hidden">
@@ -141,21 +225,17 @@ export default function ProductDetails() {
             </div>
         </div>
 
-        {/* ---------------------------------------------------------
-            ROW 3: DETAILS SPLIT
-        --------------------------------------------------------- */}
+        {/* ROW 3: DETAILS SPLIT */}
         <div className="relative flex flex-col lg:flex-row">
             
-            {/* --- LEFT COLUMN (Features & Materials) --- */}
+            {/* LEFT COLUMN */}
             <div className="relative w-full lg:w-[640px] flex flex-col">
                 <VerticalBorder className="right-0 hidden lg:block" />
 
-                {/* Features Section */}
                 <div className="relative p-6 md:p-[40px_60px] flex flex-col gap-10">
                      <HorizontalBorder className="bottom-0" />
                      <h3 className="text-[24px] font-medium text-white">Features</h3>
                      <ul className="flex flex-col gap-3">
-                        {/* Custom Bullet Points */}
                         {[
                             "Distressed detailing for a rugged look",
                             "Button-up front closure with engraved metal buttons",
@@ -172,7 +252,6 @@ export default function ProductDetails() {
                      </ul>
                 </div>
 
-                {/* Materials Section */}
                 <div className="relative p-6 md:p-[40px_60px] flex flex-col gap-[30px]">
                     <div className="flex flex-col gap-[12px]">
                         <h3 className="text-[24px] font-medium text-white">Materials</h3>
@@ -180,16 +259,14 @@ export default function ProductDetails() {
                             Flowing from Grecian folds to glittering silks, the evening gown has graced centuries in luxury.
                         </p>
                     </div>
-                    {/* Material Swatch Image */}
                     <div className="relative w-full h-[311px] bg-[#EADDCD] overflow-hidden">
-                        <Image src="/products/material.svg" alt="Material Texture" fill className="object-cover" />
-                        {/* Placeholder fallback if image missing */}
                         <div className="absolute inset-0 bg-[#EADDCD] opacity-20"></div>
+                        <Image src="/products/material.svg" alt="Material Texture" fill className="object-cover" />
                     </div>
                 </div>
             </div>
 
-            {/* --- RIGHT COLUMN (Options, Size, Price, Reviews) --- */}
+            {/* RIGHT COLUMN */}
             <div className="w-full lg:w-[640px] flex flex-col">
 
                 {/* 1. Colour Options */}
@@ -200,12 +277,18 @@ export default function ProductDetails() {
                         <span className={`${montserratalter.className} text-[12px] text-white tracking-wide`}>Blue / Tan / Beige</span>
                         <div className="flex gap-3">
                             {colors.map((c) => (
-                                <button key={c.name} onClick={() => setSelectedColor(c.name)} className="relative w-8 h-8 rounded-full flex items-center justify-center">
-                                    <span className="absolute inset-0 rounded-full border border-white"></span>
-                                    <span className="w-full h-full rounded-full border-[3px] border-transparent" style={{backgroundColor: c.hex}}></span>
-                                    {selectedColor === c.name && (
-                                        <div className="absolute inset-0 m-auto w-3 h-3 bg-[#D2B589] rounded-full z-10" />
-                                    )}
+                                <button 
+                                    key={c.name} 
+                                    onClick={() => setSelectedColor(c.name)} 
+                                    className={`
+                                        w-[32px] h-[32px] rounded-full flex items-center justify-center transition-all
+                                        ${selectedColor === c.name ? 'border border-white' : 'border border-transparent'}
+                                    `}
+                                >
+                                    <div 
+                                        className="w-full h-full rounded-full" 
+                                        style={{backgroundColor: c.hex}}
+                                    />
                                 </button>
                             ))}
                         </div>
@@ -216,9 +299,8 @@ export default function ProductDetails() {
                 <div className="relative p-6 md:p-[40px_60px] flex flex-col gap-4">
                     <HorizontalBorder className="bottom-0" />
                     
-                    {/* Toggle Buttons */}
-                    <div className="flex gap-[30px] mb-4">
-                        {["Select Sizes", "Order Multiple"].map((mode) => (
+                    <div className="flex gap-[30px] mb-8">
+                        {(["Select Sizes", "Order Multiple"] as const).map((mode) => (
                             <button 
                                 key={mode}
                                 onClick={() => setToggleMode(mode)}
@@ -226,45 +308,67 @@ export default function ProductDetails() {
                                     toggleMode === mode ? "bg-[#D2B589]" : "bg-transparent border border-[#212F52]"
                                 }`}
                             >
-                                <span className={`${montserratalter.className} text-[18px] ${toggleMode === mode ? "text-[#212F52]" : "text-[#81807E]"}`}>
+                                <span className={`${montserratalter.className} text-[16px] lg:text-[18px] ${toggleMode === mode ? "text-[#212F52]" : "text-[#81807E]"}`}>
                                     {mode}
                                 </span>
                             </button>
                         ))}
                     </div>
 
-                    {/* Size Grid (Roboto Mono) */}
-                    <div className="flex flex-wrap gap-[14px]">
-                        {sizes.map((size) => (
-                            <button 
-                                key={size}
-                                onClick={() => setSelectedSize(size)}
-                                className={`
-                                    w-[51px] h-[43px] rounded-full flex items-center justify-center transition-all
-                                    ${selectedSize === size ? 'bg-[#D2B589] text-[#212F52]' : 'bg-[#212F52] text-white hover:bg-[#2a3c68]'}
-                                `}
-                            >
-                                <span className={`${robotoMono.className} text-[18px]`}>{size}</span>
-                            </button>
-                        ))}
-                    </div>
+                    {toggleMode === "Select Sizes" ? (
+                        <div className="flex flex-wrap gap-[14px]">
+                            {sizes.map((size) => (
+                                <button 
+                                    key={size}
+                                    onClick={() => setSelectedSize(size)}
+                                    className={`
+                                        w-[51px] h-[43px] rounded-full flex items-center justify-center transition-all
+                                        ${selectedSize === size ? 'bg-[#D2B589] text-[#212F52]' : 'bg-[#212F52] text-white hover:bg-[#2a3c68]'}
+                                    `}
+                                >
+                                    <span className={`${robotoMono.className} text-[18px]`}>{size}</span>
+                                </button>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex flex-col gap-4">
+                            {sizes.map((size) => (
+                                <div key={size} className="flex items-center gap-[40px]">
+                                    <div className="w-[51px] h-[43px] rounded-[100px] bg-[#212F52] flex items-center justify-center">
+                                        <span className={`${robotoMono.className} text-[18px] text-white`}>{size}</span>
+                                    </div>
+                                    <QuantityStepper 
+                                        value={sizeQuantities[size] || 0}
+                                        onMinus={() => updateQuantity(size, -1)}
+                                        onPlus={() => updateQuantity(size, 1)}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {/* 3. Price Section */}
                 <div className="relative p-6 md:p-[40px_60px] flex flex-col justify-center h-[173px] gap-4">
                      <HorizontalBorder className="bottom-0" />
                      <h3 className="text-[24px] font-medium text-white">Price</h3>
-                     
                      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                             <span className={`${montserratalter.className} text-[24px] font-medium text-white`}>$89.99</span>
                             <span className={`${montserratalter.className} text-[16px] text-[#81807E]`}>[ MRP incl. of all taxes ]</span>
                         </div>
-                        
-                        {/* Duplicate Add to Cart for ease */}
-                        <button className="flex items-center justify-center gap-2 px-[18px] py-[13px] bg-[#000A23] border-[0.76px] border-dashed border-[#8B744B] rounded-[9px] hover:bg-[#0a1533] transition">
-                            <span className="text-[14px] text-white whitespace-nowrap">Add to Cart</span>
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+                        <button className="relative flex items-center justify-center gap-3 w-[150px] h-[50px] bg-[#000A23] rounded-[9px] group/btn">
+                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 150 50" fill="none" preserveAspectRatio="none">
+                                <rect x="0.5" y="0.5" width="149" height="49" rx="9" stroke="#8B744B" strokeWidth="0.76" strokeDasharray="6 3"/>
+                            </svg>
+                            <div className="absolute top-0 left-0 w-[12px] h-[12px] border-t border-l border-[#D2B589] rounded-tl-[9px]" />
+                            <div className="absolute top-0 right-0 w-[12px] h-[12px] border-t border-r border-[#D2B589] rounded-tr-[9px]" />
+                            <div className="absolute bottom-0 right-0 w-[12px] h-[12px] border-b border-r border-[#D2B589] rounded-br-[9px]" />
+                            <div className="absolute bottom-0 left-0 w-[12px] h-[12px] border-b border-l border-[#D2B589] rounded-bl-[9px]" />
+                            <span className={`${montserrat.className} text-[14px] text-white font-normal`}>Add to Cart</span>
+                            <div className="relative w-5 h-5">
+                                <Image src="/cart.svg" alt="Cart" fill className="object-contain" />
+                            </div>
                         </button>
                      </div>
                 </div>
@@ -276,30 +380,25 @@ export default function ProductDetails() {
                     </div>
 
                     <div className="flex flex-col md:flex-row gap-8">
-                        {/* Big Number */}
-                        <div className="flex flex-col items-center justify-center">
+                        <div className="flex flex-col items-center justify-start">
                             <span className="text-[40px] font-medium text-white leading-[150%]">4.8</span>
-                            <div className="flex gap-1">
-                                {[1,2,3,4,5].map(s => <div key={s} className="w-5 h-5 bg-[#FFCE22] rounded-[1px]" />)}
+                            <div className="flex gap-1 mt-1">
+                                {[1,2,3,4,5].map(s => <StarIcon key={s} />)}
                             </div>
                             <span className="text-[16px] text-[#81807E] mt-2">49 Ratings</span>
                         </div>
 
-                        {/* Progress Bars (Exact Figma CSS replication) */}
                         <div className="flex-1 flex flex-col gap-[12px]">
                             {[
-                                { star: 5, width: "90%" }, // 249px approx
-                                { star: 4, width: "80%" }, // 221px approx
-                                { star: 3, width: "65%" }, // 179px approx
-                                { star: 2, width: "45%" }, // 135px approx
-                                { star: 1, width: "30%" }  // 87px approx
+                                { star: "05", width: "90%" }, 
+                                { star: "04", width: "80%" },
+                                { star: "03", width: "65%" },
+                                { star: "02", width: "45%" },
+                                { star: "01", width: "30%" }
                             ].map((rating) => (
                                 <div key={rating.star} className="flex items-center gap-4 h-[24px]">
-                                    {/* Star Icon */}
-                                    <div className="w-5 h-5 bg-[#FFCE22] rounded-[1px]" />
-                                    <span className="text-[#81807E] text-[16px] w-[18px]">{rating.star}</span>
-                                    
-                                    {/* The Bar */}
+                                    <StarIcon />
+                                    <span className="text-[#81807E] text-[16px] w-[18px] text-center">{rating.star}</span>
                                     <div className="relative flex-1 h-[16px] bg-[#1A1A1A] border border-[#212F52] rounded-[100px] p-[6px] flex items-center">
                                         <div 
                                             className="h-[4px] bg-[#AE9B84] rounded-[100px]" 

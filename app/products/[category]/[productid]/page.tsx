@@ -17,6 +17,7 @@ export default async function ProductPage({ params }: PageProps) {
       
       {/* 2. Call the Details Component */}
       <ProductDetails />
+      <
 
       <FooterSection />
     </main>
