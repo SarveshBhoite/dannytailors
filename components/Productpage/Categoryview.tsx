@@ -3,6 +3,7 @@
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import { Montserrat, Montserrat_Alternates } from "next/font/google";
+import Link from "next/link"; // Added Import
 
 // 1. CONFIGURE FONTS
 const montserrat = Montserrat({ subsets: ["latin"], weight: ["400", "500", "600", "700"] });
@@ -39,7 +40,7 @@ const COLORS_LIST = [
 const SIZES_LIST = ["30", "32", "34", "36", "38", "40", "42", "44", "46", "48", "50"];
 const CLOTHING_SIZE_LIST = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"];
 
-// EXACT TYPOGRAPHY STYLES (Moved outside to be accessible by all components)
+// EXACT TYPOGRAPHY STYLES
 const maisonNeueStyle = {
   fontFamily: '"Maison Neue", sans-serif',
   fontSize: '10.49px',
@@ -48,7 +49,7 @@ const maisonNeueStyle = {
   fontWeight: 400,
 };
 
-// --- SVG BORDER COMPONENTS (Moved Outside) ---
+// --- SVG BORDER COMPONENTS ---
 const borderConfig = {
   color: "#212F52",
   width: 1.53,
@@ -95,8 +96,7 @@ const InternalDashedBorderBottom = ({ className = "" }: { className?: string }) 
   </div>
 );
 
-// --- FILTER SIDEBAR COMPONENT (Moved Outside) ---
-// We define the props needed for this component to work
+// --- FILTER SIDEBAR COMPONENT ---
 interface FilterPanelProps {
   openSections: { category: boolean; color: boolean; size: boolean; clothing: boolean };
   toggleSection: (section: keyof FilterPanelProps['openSections']) => void;
@@ -238,7 +238,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
   });
 
   return (
-    <section className="min-h-screen bg-[#000A23] text-white pt-26 pb-20 select-none">
+    <section className="min-h-screen bg-[#000A23] text-white pt-32 pb-20 select-none">
       
       {/* MOBILE FILTER OVERLAY */}
       {isMobileFilterOpen && (
@@ -304,7 +304,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
             {/* Image Container */}
             <div className="absolute inset-0 rounded-t-[20px] rounded-b-[10px] overflow-hidden">
                 <Image 
-                    src="/products/chefcoats/hero.svg" 
+                    src="/shop-now/shop-bg.svg" 
                     alt="Bespoke Tailoring"
                     fill
                     className="object-cover object-center"
@@ -312,7 +312,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
                 />
                 
                 <div className="absolute inset-0 flex flex-col justify-end items-center pb-12 md:pb-16 w-full px-4">
-                    <h1 className={`${montserrat.className} text-[26px] md:text-[60px] lg:text-[80px] font-bold text-white uppercase tracking-[0.14em] leading-none drop-shadow-lg whitespace-nowrap text-center`}>
+                    <h1 className={`${montserrat.className} text-[32px] md:text-[60px] lg:text-[80px] font-bold text-white uppercase tracking-[0.14em] leading-none drop-shadow-lg whitespace-nowrap text-center`}>
                         BESPOKE TAILORING
                     </h1>
                 </div>
@@ -320,7 +320,7 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
 
             {/* Shop Now Button */}
             <div className="absolute -bottom-[19px] md:-bottom-[25px] left-1/2 -translate-x-1/2 z-30">
-                <button className="relative flex items-center justify-center gap-2 w-[102px] h-[38px] md:w-[140px] md:h-[50px] bg-[#000A23] rounded-[8px] group/btn shadow-lg">
+                <button className="relative flex items-center justify-center gap-2 w-[110px] h-[38px] md:w-[140px] md:h-[50px] bg-[#000A23] rounded-[8px] group/btn shadow-lg">
                     <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 140 50" fill="none" preserveAspectRatio="none">
                         <rect x="0.5" y="0.5" width="139" height="49" rx="8" stroke="#8B744B" strokeWidth="1" strokeDasharray="6 3"/>
                     </svg>
@@ -382,64 +382,103 @@ export default function CategoryView({ categorySlug }: CategoryViewProps) {
               </h2>
             </div>
 
-            {/* PRODUCT GRID */}
+            {/* PRODUCT GRID - FULLY CUSTOM SVG GRID (SQUARE CORNERS) */}
             <div className="relative">
+                
+                {/* 1. OUTER BORDER (Absolute SVG overlay) - SQUARE corners */}
                 <OuterDashedBorder />
+
+                {/* 2. GRID CONTENT */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                     {products.map((product, index) => (
-                        <div 
-                        key={product.id} 
-                        className={`relative flex flex-col bg-[#000A23] p-[23px] gap-[23px]`}
+                        // WRAPPED CARD IN LINK
+                        <Link 
+                            key={product.id} 
+                            href={`/products/${safeSlug}/${product.id}`} 
+                            className="contents" // Ensures grid layout applies to the div below
                         >
-                            <InternalDashedBorderRight className="block md:[&:nth-child(2n)]:hidden lg:[&:nth-child(2n)]:block lg:[&:nth-child(3n)]:hidden" />
-                            <InternalDashedBorderBottom className={`block last:hidden ${index >= products.length - (products.length % 3 || 3) ? "lg:hidden" : ""} ${index >= products.length - (products.length % 2 || 2) ? "md:hidden" : ""}`} />
+                            <div 
+                            className={`
+                                relative
+                                flex flex-col 
+                                bg-[#000A23] 
+                                p-[23px] 
+                                gap-[23px]
+                                cursor-pointer
+                            `}
+                            >
+                                {/* --- INTERNAL RIGHT BORDER SVG --- */}
+                                <InternalDashedBorderRight className="block md:[&:nth-child(2n)]:hidden lg:[&:nth-child(2n)]:block lg:[&:nth-child(3n)]:hidden" />
 
-                            <div className="relative w-full h-[296px] bg-[#D9D9D9] rounded-t-[38px] overflow-hidden">
-                                <Image src={product.image} alt={product.name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
-                            </div>
+                                {/* --- INTERNAL BOTTOM BORDER SVG --- */}
+                                <InternalDashedBorderBottom className={`
+                                    block
+                                    last:hidden
+                                    ${index >= products.length - (products.length % 3 || 3) ? "lg:hidden" : ""}
+                                    ${index >= products.length - (products.length % 2 || 2) ? "md:hidden" : ""}
+                                `} />
 
-                            <div className="flex flex-col gap-[15px]">
-                                <div className="flex justify-between items-center h-[48px]">
-                                    <div className="flex items-center justify-center bg-[#212F52] rounded-[76px] px-[12px] py-[7px] h-[36px]">
-                                        <span className={`${montAlt.className} text-[13.8px] text-[#D2B589] whitespace-nowrap`}>
-                                            {product.type}
-                                        </span>
-                                    </div>
-                                    <button className="relative flex items-center justify-center gap-1 w-[121px] h-[48px] bg-[#000A23] rounded-[9px] group/btn">
-                                        <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 121 48" fill="none" preserveAspectRatio="none">
-                                            <rect x="0.5" y="0.5" width="120" height="47" rx="9" stroke="#8B744B" strokeWidth="0.76" strokeDasharray="4 2"/>
-                                        </svg>
-                                        <div className="absolute top-0 left-0 w-[12px] h-[12px] border-t border-l border-[#D2B589] rounded-tl-[9px]" />
-                                        <div className="absolute top-0 right-0 w-[12px] h-[12px] border-t border-r border-[#D2B589] rounded-tr-[9px]" />
-                                        <div className="absolute bottom-0 right-0 w-[12px] h-[12px] border-b border-r border-[#D2B589] rounded-br-[9px]" />
-                                        <div className="absolute bottom-0 left-0 w-[12px] h-[12px] border-b border-l border-[#D2B589] rounded-bl-[9px]" />
-                                        <span className={`${montserrat.className} text-[13.8px] font-normal text-white`}>Buy Now</span>
-                                        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" className="transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5">
-                                            <path d="M1 11L11 1M11 1H3.5M11 1V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                                        </svg>
-                                    </button>
+
+                                {/* IMAGE */}
+                                <div className="relative w-full h-[296px] bg-[#D9D9D9] rounded-t-[38px] overflow-hidden">
+                                    <Image 
+                                    src={product.image}
+                                    alt={product.name}
+                                    fill
+                                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                                    />
                                 </div>
-                                <h3 className={`${montserrat.className} text-[18.4px] font-medium text-white leading-[150%]`}>
-                                    {product.name}
-                                </h3>
-                                <div className="flex items-center gap-[15px]">
-                                    <div className="flex items-center gap-[6px]">
-                                        <span className={`${montAlt.className} text-[13.8px] text-[#81807E]`}>Fit</span>
-                                        <div className="w-[3px] h-[3px] bg-[#4D4D4D] rounded-full" />
-                                        <span className={`${montAlt.className} text-[15.3px] font-medium text-[#CCCCCC] whitespace-nowrap`}>Ankle-length</span>
+
+                                {/* CONTENT */}
+                                <div className="flex flex-col gap-[15px]">
+                                    <div className="flex justify-between items-center h-[48px]">
+                                        <div className="flex items-center justify-center bg-[#212F52] rounded-[76px] px-[12px] py-[7px] h-[36px]">
+                                            <span className={`${montAlt.className} text-[13.8px] text-[#D2B589] whitespace-nowrap`}>
+                                                {product.type}
+                                            </span>
+                                        </div>
+
+                                        <button className="relative flex items-center justify-center gap-1 w-[121px] h-[48px] bg-[#000A23] rounded-[9px] group/btn">
+                                            <svg className="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 121 48" fill="none" preserveAspectRatio="none">
+                                                <rect x="0.5" y="0.5" width="120" height="47" rx="9" stroke="#8B744B" strokeWidth="0.76" strokeDasharray="4 2"/>
+                                            </svg>
+                                            <div className="absolute top-0 left-0 w-[12px] h-[12px] border-t border-l border-[#D2B589] rounded-tl-[9px]" />
+                                            <div className="absolute top-0 right-0 w-[12px] h-[12px] border-t border-r border-[#D2B589] rounded-tr-[9px]" />
+                                            <div className="absolute bottom-0 right-0 w-[12px] h-[12px] border-b border-r border-[#D2B589] rounded-br-[9px]" />
+                                            <div className="absolute bottom-0 left-0 w-[12px] h-[12px] border-b border-l border-[#D2B589] rounded-bl-[9px]" />
+                                            
+                                            <span className={`${montserrat.className} text-[13.8px] font-normal text-white`}>Buy Now</span>
+                                            <svg width="10" height="10" viewBox="0 0 12 12" fill="none" className="transition-transform group-hover/btn:-translate-y-0.5 group-hover/btn:translate-x-0.5">
+                                                <path d="M1 11L11 1M11 1H3.5M11 1V8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                                            </svg>
+                                        </button>
                                     </div>
-                                    <div className="flex items-center gap-[6px]">
-                                        <span className={`${montAlt.className} text-[13.8px] text-[#81807E]`}>Price</span>
-                                        <div className="w-[3px] h-[3px] bg-[#4D4D4D] rounded-full" />
-                                        <span className={`${montAlt.className} text-[15.3px] font-medium text-[#CCCCCC]`}>{product.price}</span>
+
+                                    <h3 className={`${montserrat.className} text-[18.4px] font-medium text-white leading-[150%]`}>
+                                        {product.name}
+                                    </h3>
+
+                                    <div className="flex items-center gap-[15px]">
+                                        <div className="flex items-center gap-[6px]">
+                                            <span className={`${montAlt.className} text-[13.8px] text-[#81807E]`}>Fit</span>
+                                            <div className="w-[3px] h-[3px] bg-[#4D4D4D] rounded-full" />
+                                            <span className={`${montAlt.className} text-[15.3px] font-medium text-[#CCCCCC] whitespace-nowrap`}>Ankle-length</span>
+                                        </div>
+                                        <div className="flex items-center gap-[6px]">
+                                            <span className={`${montAlt.className} text-[13.8px] text-[#81807E]`}>Price</span>
+                                            <div className="w-[3px] h-[3px] bg-[#4D4D4D] rounded-full" />
+                                            <span className={`${montAlt.className} text-[15.3px] font-medium text-[#CCCCCC]`}>{product.price}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </Link>
                     ))}
                 </div>
             </div>
+
           </main>
+
         </div>
       </div>
     </section>
