@@ -144,24 +144,19 @@ export default function Navbar() {
             </svg>
           </Link>
 
-          {/* CART ICON */}
+          {/* CART ICON - UPDATED TO USE CUSTOM SVG */}
           <button
-            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center text-[#8B744B]"
+            className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center"
             aria-label="Cart"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 sm:h-5 sm:w-5 md:h-4 md:w-4"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="#f2d39a"
-              strokeWidth={1.4}
-            >
-              <path d="M6 6h15l-1.5 9h-12z" />
-              <circle cx="9" cy="18" r="1" />
-              <circle cx="17" cy="18" r="1" />
-              <path d="M6 6 5 3H3" />
-            </svg>
+            <div className="relative w-5 h-5 sm:w-6 sm:h-6 md:w-5 md:h-5">
+              <Image 
+                src="/Union.svg" 
+                alt="Cart" 
+                fill 
+                className="object-contain"
+              />
+            </div>
           </button>
 
           {/* MENU TOGGLE */}
