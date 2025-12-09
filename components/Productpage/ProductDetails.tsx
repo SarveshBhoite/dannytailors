@@ -149,7 +149,7 @@ export default function ProductDetails() {
   };
 
   return (
-    <div className={`relative w-full max-w-[1280px] mx-auto ${montserrat.className}`}>
+    <div className={`relative w-full max-w-[1280px] mt-4 mx-auto ${montserrat.className}`}>
       
       {/* MAIN CONTAINER */}
       <div className="relative rounded-[16px] overflow-hidden bg-[#000a23]">
@@ -186,14 +186,14 @@ export default function ProductDetails() {
                     
                     <span className={`${montserrat.className} text-[14px] text-white font-normal`}>Add to Cart</span>
                     <div className="relative w-5 h-5">
-                        <Image src="/cart.svg" alt="Cart" fill className="object-contain" />
+                        <Image src="/products/cart.svg" alt="Cart" fill className="object-contain" />
                     </div>
                 </button>
 
                 {/* Shop Now */}
                 <button className="flex items-center justify-center gap-3 px-[20px] py-[14px] bg-[#D2B589] rounded-[8px] hover:bg-[#c4a676] transition h-[50px]">
                      <div className="relative w-5 h-5">
-                        <Image src="/shop.svg" alt="Shop" fill className="object-contain" />
+                        <Image src="/products/shop.svg" alt="Shop" fill className="object-contain" />
                     </div>
                     <span className="text-[14px] text-[#0F0F0F] font-normal whitespace-nowrap">Shop Now</span>
                 </button>
@@ -367,7 +367,7 @@ export default function ProductDetails() {
                             <div className="absolute bottom-0 left-0 w-[12px] h-[12px] border-b border-l border-[#D2B589] rounded-bl-[9px]" />
                             <span className={`${montserrat.className} text-[14px] text-white font-normal`}>Add to Cart</span>
                             <div className="relative w-5 h-5">
-                                <Image src="/cart.svg" alt="Cart" fill className="object-contain" />
+                                <Image src="/products/cart.svg" alt="Cart" fill className="object-contain" />
                             </div>
                         </button>
                      </div>

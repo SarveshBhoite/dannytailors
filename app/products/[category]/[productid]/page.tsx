@@ -14,7 +14,7 @@ export default async function ProductPage({ params }: PageProps) {
   const { category, productid } = resolvedParams;
 
   return (
-    <main className="min-h-screen bg-[#050B21] pt-24 pb-10">
+    <main className="min-h-screen bg-[#050B21] pt-24">
       <Navbar />
       
       {/* 2. Call the Details Component */}

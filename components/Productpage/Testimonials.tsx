@@ -119,7 +119,7 @@ const TwitterIcon = () => (
 
 export default function Testimonials() {
   return (
-    <section className="w-full max-w-[1280px] mx-auto mt-10 mb-20 px-4 xl:px-0">
+    <section className="w-full max-w-[1280px] mx-auto mt-10 mb-10 px-4 xl:px-0">
         
         {/* MAIN CONTAINER */}
         <div className="relative bg-transparent rounded-[16px] overflow-hidden">
